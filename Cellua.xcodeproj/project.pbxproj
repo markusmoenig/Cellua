@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B0710CF2672ED020021DD82 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0710CE2672ED020021DD82 /* Model.swift */; };
+		2B0710D02672ED020021DD82 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0710CE2672ED020021DD82 /* Model.swift */; };
+		2B0710D32672EDA10021DD82 /* AppSidebarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0710D22672EDA10021DD82 /* AppSidebarNavigation.swift */; };
+		2B0710D42672EDA10021DD82 /* AppSidebarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0710D22672EDA10021DD82 /* AppSidebarNavigation.swift */; };
+		2BD3AA1C26743F1C002E70AF /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA1B26743F1C002E70AF /* MetalView.swift */; };
+		2BD3AA1D26743F1C002E70AF /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA1B26743F1C002E70AF /* MetalView.swift */; };
+		2BD3AA1F26743F6B002E70AF /* MathLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA1E26743F6B002E70AF /* MathLibrary.swift */; };
+		2BD3AA2026743F6B002E70AF /* MathLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA1E26743F6B002E70AF /* MathLibrary.swift */; };
+		2BD3AA2226744527002E70AF /* MetalDrawables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA2126744527002E70AF /* MetalDrawables.swift */; };
+		2BD3AA2326744527002E70AF /* MetalDrawables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA2126744527002E70AF /* MetalDrawables.swift */; };
+		2BD3AA25267446F3002E70AF /* Drawables.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA24267446F3002E70AF /* Drawables.metal */; };
+		2BD3AA26267446F3002E70AF /* Drawables.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA24267446F3002E70AF /* Drawables.metal */; };
+		2BD3AA2926744796002E70AF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA2826744796002E70AF /* Utilities.swift */; };
+		2BD3AA2A26744796002E70AF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA2826744796002E70AF /* Utilities.swift */; };
 		2BF305D62672E5AC00BB9982 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF305D52672E5AC00BB9982 /* Tests_iOS.swift */; };
 		2BF305E02672E5AC00BB9982 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF305DF2672E5AC00BB9982 /* Tests_macOS.swift */; };
 		2BF305E12672E5AC00BB9982 /* CelluaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF305BF2672E5AB00BB9982 /* CelluaApp.swift */; };
@@ -15,6 +29,10 @@
 		2BF305E42672E5AC00BB9982 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF305C02672E5AB00BB9982 /* ContentView.swift */; };
 		2BF305E52672E5AC00BB9982 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BF305C12672E5AC00BB9982 /* Assets.xcassets */; };
 		2BF305E62672E5AC00BB9982 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BF305C12672E5AC00BB9982 /* Assets.xcassets */; };
+		2BF40B432674651F0090A139 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF40B422674651F0090A139 /* Renderer.swift */; };
+		2BF40B442674651F0090A139 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF40B422674651F0090A139 /* Renderer.swift */; };
+		2BF40B4626746D4E0090A139 /* Render.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2BF40B4526746D4E0090A139 /* Render.metal */; };
+		2BF40B4726746D4E0090A139 /* Render.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2BF40B4526746D4E0090A139 /* Render.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +53,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2B0710CE2672ED020021DD82 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		2B0710D22672EDA10021DD82 /* AppSidebarNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebarNavigation.swift; sourceTree = "<group>"; };
+		2BD3AA1B26743F1C002E70AF /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		2BD3AA1E26743F6B002E70AF /* MathLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathLibrary.swift; sourceTree = "<group>"; };
+		2BD3AA2126744527002E70AF /* MetalDrawables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalDrawables.swift; sourceTree = "<group>"; };
+		2BD3AA24267446F3002E70AF /* Drawables.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Drawables.metal; sourceTree = "<group>"; };
+		2BD3AA2726744708002E70AF /* Drawables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drawables.h; sourceTree = "<group>"; };
+		2BD3AA2826744796002E70AF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2BF305BF2672E5AB00BB9982 /* CelluaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelluaApp.swift; sourceTree = "<group>"; };
 		2BF305C02672E5AB00BB9982 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2BF305C12672E5AC00BB9982 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -44,6 +70,8 @@
 		2BF305D52672E5AC00BB9982 /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
 		2BF305DB2672E5AC00BB9982 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BF305DF2672E5AC00BB9982 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
+		2BF40B422674651F0090A139 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		2BF40B4526746D4E0090A139 /* Render.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Render.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +106,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2B0710CD2672ECED0021DD82 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2B0710CE2672ED020021DD82 /* Model.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		2B0710D12672ED7A0021DD82 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				2B0710D22672EDA10021DD82 /* AppSidebarNavigation.swift */,
+				2BF305C02672E5AB00BB9982 /* ContentView.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		2BD3AA1A26743EF0002E70AF /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				2BF40B422674651F0090A139 /* Renderer.swift */,
+				2BD3AA1B26743F1C002E70AF /* MetalView.swift */,
+				2BD3AA1E26743F6B002E70AF /* MathLibrary.swift */,
+				2BD3AA2126744527002E70AF /* MetalDrawables.swift */,
+				2BF40B4526746D4E0090A139 /* Render.metal */,
+				2BD3AA24267446F3002E70AF /* Drawables.metal */,
+				2BD3AA2726744708002E70AF /* Drawables.h */,
+				2BD3AA2826744796002E70AF /* Utilities.swift */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
 		2BF305B92672E5AA00BB9982 = {
 			isa = PBXGroup;
 			children = (
@@ -92,7 +152,9 @@
 			isa = PBXGroup;
 			children = (
 				2BF305BF2672E5AB00BB9982 /* CelluaApp.swift */,
-				2BF305C02672E5AB00BB9982 /* ContentView.swift */,
+				2B0710D12672ED7A0021DD82 /* Navigation */,
+				2B0710CD2672ECED0021DD82 /* Model */,
+				2BD3AA1A26743EF0002E70AF /* Rendering */,
 				2BF305C12672E5AC00BB9982 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -283,8 +345,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B0710D32672EDA10021DD82 /* AppSidebarNavigation.swift in Sources */,
+				2BD3AA2226744527002E70AF /* MetalDrawables.swift in Sources */,
+				2BF40B4626746D4E0090A139 /* Render.metal in Sources */,
+				2B0710CF2672ED020021DD82 /* Model.swift in Sources */,
+				2BD3AA1C26743F1C002E70AF /* MetalView.swift in Sources */,
 				2BF305E32672E5AC00BB9982 /* ContentView.swift in Sources */,
+				2BD3AA25267446F3002E70AF /* Drawables.metal in Sources */,
+				2BD3AA2926744796002E70AF /* Utilities.swift in Sources */,
 				2BF305E12672E5AC00BB9982 /* CelluaApp.swift in Sources */,
+				2BF40B432674651F0090A139 /* Renderer.swift in Sources */,
+				2BD3AA1F26743F6B002E70AF /* MathLibrary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,8 +363,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B0710D42672EDA10021DD82 /* AppSidebarNavigation.swift in Sources */,
+				2BD3AA2326744527002E70AF /* MetalDrawables.swift in Sources */,
+				2BF40B4726746D4E0090A139 /* Render.metal in Sources */,
+				2B0710D02672ED020021DD82 /* Model.swift in Sources */,
+				2BD3AA1D26743F1C002E70AF /* MetalView.swift in Sources */,
 				2BF305E42672E5AC00BB9982 /* ContentView.swift in Sources */,
+				2BD3AA26267446F3002E70AF /* Drawables.metal in Sources */,
+				2BD3AA2A26744796002E70AF /* Utilities.swift in Sources */,
 				2BF305E22672E5AC00BB9982 /* CelluaApp.swift in Sources */,
+				2BF40B442674651F0090A139 /* Renderer.swift in Sources */,
+				2BD3AA2026743F6B002E70AF /* MathLibrary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,12 +600,13 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.moenig.Cellua;
 				PRODUCT_NAME = Cellua;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Shared/Rendering/Drawables.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -549,12 +630,13 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.moenig.Cellua;
 				PRODUCT_NAME = Cellua;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Shared/Rendering/Drawables.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
