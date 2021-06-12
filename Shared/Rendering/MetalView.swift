@@ -28,6 +28,8 @@ public class CTKView        : MTKView
     
     var renderer            : Renderer? = nil
     var drawables           : MetalDrawables? = nil
+    
+    var color               : Float = 1
 
     func reset()
     {
@@ -39,13 +41,14 @@ public class CTKView        : MTKView
         swipeDirection = nil
     }
     
-    public override func draw()
+    func update()
     {
         renderer?.render()
         
         if drawables?.encodeStart(float4(0,0,0,0)) != nil {
             
-            if let texture = renderer?.valueTexture {
+            
+            if let texture = renderer?.currentTexture {
                 drawables?.drawBox(position: float2(0,0), size: float2(Float(texture.width), Float(texture.height)), rounding: 0, borderSize: 0, onion: 0, fillColor: float4(0,0,0,1), borderColor: float4(0,0,0,0), texture: texture)
             }
             
@@ -84,26 +87,28 @@ struct MetalView: NSViewRepresentable {
     }
     
     func makeNSView(context: NSViewRepresentableContext<MetalView>) -> MTKView {
-        let ctkView =  CTKView()
+        let ctkView = CTKView(frame: NSMakeRect(0, 0, 100, 100))
         
         ctkView.delegate = context.coordinator
         ctkView.preferredFramesPerSecond = 60
-        ctkView.enableSetNeedsDisplay = true
+        ctkView.enableSetNeedsDisplay = false
         if let metalDevice = MTLCreateSystemDefaultDevice() {
             ctkView.device = metalDevice
         }
         ctkView.framebufferOnly = false
         ctkView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
         ctkView.drawableSize = ctkView.frame.size
-        ctkView.enableSetNeedsDisplay = true
-        ctkView.isPaused = true
+        ctkView.isPaused = false
         
         model.setView(ctkView)
 
         return ctkView
     }
     
-    func updateNSView(_ nsView: MTKView, context: NSViewRepresentableContext<MetalView>) {
+    func updateNSView(_ view: MTKView, context: NSViewRepresentableContext<MetalView>) {
+        if let ctkView = view as? CTKView {
+            ctkView.update()
+        }
     }
     
     class Coordinator : NSObject, MTKViewDelegate {
@@ -121,9 +126,15 @@ struct MetalView: NSViewRepresentable {
         }
         
         func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+            if let ctkView = view as? CTKView {
+                ctkView.update()
+            }
         }
         
         func draw(in view: MTKView) {
+            if let ctkView = view as? CTKView {
+                ctkView.update()
+            }
         }
     }
 }

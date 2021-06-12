@@ -10,7 +10,7 @@ import MetalKit
 class Renderer {
     
     enum ComputeStates : Int {
-        case ResetTexture
+        case ResetTexture, GameOfLife
     }
     
     /// Reference to the current CTKView
@@ -18,7 +18,10 @@ class Renderer {
     
     /// The value textures
     var valueTexture    : MTLTexture? = nil
-    
+    var valueTexture2   : MTLTexture? = nil
+
+    var currentTexture  : MTLTexture? = nil
+
     /// Set to true if the renderer needs to reset (on resize, new shapes / rules etc).
     var needsReset      : Bool = true
     
@@ -29,6 +32,8 @@ class Renderer {
     
     var commandQueue    : MTLCommandQueue? = nil
     var commandBuffer   : MTLCommandBuffer? = nil
+    
+    var pingPong        : Bool = false
 
     deinit {
         destroyTextures()
@@ -43,6 +48,7 @@ class Renderer {
         if defaultLibrary == nil {
             defaultLibrary = view.device?.makeDefaultLibrary()
             computeStates[ComputeStates.ResetTexture.rawValue] = createComputeState(name: "resetTexture")
+            computeStates[ComputeStates.GameOfLife.rawValue] = createComputeState(name: "gameOfLife")
         }
         destroyTextures()
     }
@@ -53,6 +59,9 @@ class Renderer {
         guard let texture = valueTexture else {
             return
         }
+        
+        pingPong = false
+        currentTexture = texture
         
         startCompute()
         
@@ -85,6 +94,41 @@ class Renderer {
             reset()
             return
         }
+        
+        guard let texture = valueTexture else {
+            return
+        }
+        
+        startCompute()
+        
+        guard let commandBuffer = commandBuffer else {
+            return
+        }
+
+        if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
+            
+            if let state = computeStates[ComputeStates.GameOfLife.rawValue] {
+            
+                computeEncoder.setComputePipelineState( state )
+                
+                if pingPong == false {
+                    computeEncoder.setTexture( valueTexture, index: 0 )
+                    computeEncoder.setTexture( valueTexture2, index: 1 )
+                    currentTexture = valueTexture2
+                } else {
+                    computeEncoder.setTexture( valueTexture2, index: 0 )
+                    computeEncoder.setTexture( valueTexture, index: 1 )
+                    currentTexture = valueTexture
+                }
+                    
+                calculateThreadGroups(state, computeEncoder, texture.width, texture.height)
+                computeEncoder.endEncoding()
+            }
+        }
+        
+        stopCompute(waitUntilCompleted: true)
+        
+        pingPong.toggle()
     }
     
     /// Check if all textures have the correct size
@@ -100,6 +144,16 @@ class Renderer {
             
             valueTexture?.setPurgeableState(.empty)
             valueTexture = allocTexture(size: frameSize, format: .rgba32Float)
+            
+            currentTexture = valueTexture
+        }
+        
+        if valueTexture2 == nil || valueTexture2!.width != frameSize.x || valueTexture2!.height != frameSize.y {
+            
+            needsReset = true
+            
+            valueTexture2?.setPurgeableState(.empty)
+            valueTexture2 = allocTexture(size: frameSize, format: .rgba32Float)
         }
     }
     
@@ -123,6 +177,9 @@ class Renderer {
     {
         valueTexture?.setPurgeableState(.empty)
         valueTexture = nil
+        
+        valueTexture2?.setPurgeableState(.empty)
+        valueTexture2 = nil
     }
     
     /// Starts compute operation
