@@ -17,14 +17,15 @@ struct AppSidebarNavigation: View {
     }
 
     @EnvironmentObject private var model: Model
-    @State private var presentingRewards: Bool = false
     @State private var selection: NavigationItem? = .shapes
+    
+    @State var previewText = "Hide Preview"
     
     var body: some View {
         NavigationView {
             List {
                 NavigationLink(tag: NavigationItem.shapes, selection: $selection) {
-                    Text("Shapes")
+                    ShapeList()
                 } label: {
                     Label("Shapes", systemImage: "square")
                 }
@@ -41,6 +42,25 @@ struct AppSidebarNavigation: View {
                     Label("Preview", systemImage: "list.bullet")
                 }
             }
+            
+            .navigationTitle("Cellua")
         }
+        
+        .toolbar {
+            ToolbarItemGroup(placement: .automatic) {
+
+                if selection == .shapes {                
+                    Button(previewText) {
+                        if model.showPreview == false {
+                            previewText = "Hide Preview"
+                        } else {
+                            previewText = "Show Preview"
+                        }
+                        model.showPreview.toggle()
+                    }
+                }
+            }
+        }
+        .animation(.default)//, value: 1)
     }
 }

@@ -12,8 +12,15 @@ class Model: NSObject, ObservableObject {
     var ctkView     : CTKView!
     var renderer    = Renderer()
     
+    @Published var showPreview = true
+    
+    var mnca        : MNCA
+    
     override init() {
-        super.init()
+        
+        mnca = MNCA()
+
+        super.init()        
     }
     
     /// MetalView will pass its embedded CTKView here
@@ -21,6 +28,6 @@ class Model: NSObject, ObservableObject {
     {
         ctkView = view
         ctkView.platformInit(renderer)
-        renderer.setView(ctkView)
+        renderer.setView(self, ctkView)
     }
 }

@@ -10,6 +10,16 @@
 
 #include <simd/simd.h>
 
+// MARK: Render
+
+typedef struct
+{
+    int             shape[81];
+    
+} RenderShape;
+
+// MARK: Drawables
+
 typedef struct
 {
     vector_float2   position;

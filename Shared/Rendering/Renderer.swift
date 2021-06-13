@@ -10,8 +10,11 @@ import MetalKit
 class Renderer {
     
     enum ComputeStates : Int {
-        case ResetTexture, GameOfLife
+        case ResetTexture, EvalShapes
     }
+    
+    /// Reference to the model
+    var model           : Model? = nil
     
     /// Reference to the current CTKView
     var view            : CTKView? = nil
@@ -40,15 +43,16 @@ class Renderer {
     }
     
     /// Sets the current CTKView which represents a context switch, reallocate all textures
-    func setView(_ view : CTKView)
+    func setView(_ model: Model,_ view : CTKView)
     {
+        self.model = model
         self.view = view
         
         // On the first init create the compute states
         if defaultLibrary == nil {
             defaultLibrary = view.device?.makeDefaultLibrary()
             computeStates[ComputeStates.ResetTexture.rawValue] = createComputeState(name: "resetTexture")
-            computeStates[ComputeStates.GameOfLife.rawValue] = createComputeState(name: "gameOfLife")
+            computeStates[ComputeStates.EvalShapes.rawValue] = createComputeState(name: "evalShapes")
         }
         destroyTextures()
     }
@@ -95,7 +99,7 @@ class Renderer {
             return
         }
         
-        guard let texture = valueTexture else {
+        guard let texture = valueTexture, let model = model else {
             return
         }
         
@@ -105,12 +109,16 @@ class Renderer {
             return
         }
 
+        var shapeABuffer : MTLBuffer? = nil
+
         if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
             
-            if let state = computeStates[ComputeStates.GameOfLife.rawValue] {
+            if let state = computeStates[ComputeStates.EvalShapes.rawValue] {
             
                 computeEncoder.setComputePipelineState( state )
                 
+                // Ping pong value texture
+
                 if pingPong == false {
                     computeEncoder.setTexture( valueTexture, index: 0 )
                     computeEncoder.setTexture( valueTexture2, index: 1 )
@@ -120,6 +128,13 @@ class Renderer {
                     computeEncoder.setTexture( valueTexture, index: 1 )
                     currentTexture = valueTexture
                 }
+                
+                // Shapes
+                
+                model.mnca.shapes[0].pixels9x9.withUnsafeMutableBytes { ptr in
+                    shapeABuffer = view?.device!.makeBuffer(bytes: ptr.baseAddress!, length: 81 * MemoryLayout<Int32>.stride, options: [])!
+                    computeEncoder.setBuffer(shapeABuffer, offset: 0, index: 2)
+                }
                     
                 calculateThreadGroups(state, computeEncoder, texture.width, texture.height)
                 computeEncoder.endEncoding()
@@ -128,6 +143,8 @@ class Renderer {
         
         stopCompute(waitUntilCompleted: true)
         
+        shapeABuffer?.setPurgeableState(.empty)
+
         pingPong.toggle()
     }
     
@@ -165,8 +182,8 @@ class Renderer {
         let textureDescriptor = MTLTextureDescriptor()
         textureDescriptor.textureType = MTLTextureType.type2D
         textureDescriptor.pixelFormat = format
-        textureDescriptor.width = size.x
-        textureDescriptor.height = size.y
+        textureDescriptor.width = size.x != 0 ? size.x : 1
+        textureDescriptor.height = size.y != 0 ? size.y : 1
         
         textureDescriptor.usage = MTLTextureUsage.unknown
         return view.device?.makeTexture(descriptor: textureDescriptor)
