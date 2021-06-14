@@ -26,9 +26,7 @@ class Renderer {
 
     /// Set to true if the renderer needs to reset (on resize, new shapes / rules etc).
     var needsReset      : Bool = true
-    
-    var rulesChanged    : Bool = true
-    
+        
     var defaultLibrary  : MTLLibrary? = nil
 
     /// The precompiled compute states
@@ -39,12 +37,28 @@ class Renderer {
     
     var pingPong        : Bool = false
     
+    // The buffers for the shapes, rules and the usage indicator
+    
     var shapeABuffer    : MTLBuffer? = nil
     var shapeBBuffer    : MTLBuffer? = nil
     var shapeCBuffer    : MTLBuffer? = nil
+
+    var rule1Buffer     : MTLBuffer? = nil
+    var rule2Buffer     : MTLBuffer? = nil
+    var rule3Buffer     : MTLBuffer? = nil
+    var rule4Buffer     : MTLBuffer? = nil
     
+    // Usage indicator for each of the above 7 buffers
+    
+    var arraysUsed      : [Int32]
+    var buffersUsed     : MTLBuffer? = nil
+
     var isStarted       = false
 
+    init() {
+        arraysUsed = Array<Int32>(repeating: 0, count: 7)
+    }
+    
     deinit {
         destroyTextures()
         if let shapeABuffer = shapeABuffer {
@@ -62,32 +76,85 @@ class Renderer {
         if defaultLibrary == nil {
             defaultLibrary = view.device?.makeDefaultLibrary()
             computeStates[ComputeStates.ResetTexture.rawValue] = createComputeState(name: "resetTexture")
-            //computeStates[ComputeStates.EvalShapes.rawValue] = createComputeState(name: "evalShapes")
+            computeStates[ComputeStates.EvalShapes.rawValue] = createComputeState(name: "evalShapes")
         }
     }
     
     /// Resets rendering by seting the valueTexture to random values
     func reset()
     {
-        // If the rules changed start compiling
-        if rulesChanged {
-            compile()
-            rulesChanged = false
-        }
-        
         guard let texture = valueTexture, let model = model else {
             return
         }
         
-        // Update the shape buffers
+        // Check which of the shape or rule arrays are actually used
+        // We assume shapeA and rule1 are always used
         
-        if shapeABuffer == nil {
-            model.mnca.shapes[0].pixels17x17.withUnsafeMutableBytes { ptr in
-                shapeABuffer = view?.device!.makeBuffer(bytes: ptr.baseAddress!, length: 17*17 * MemoryLayout<Int32>.stride, options: [])!
-            }
-        } else {
-            shapeABuffer!.contents().copyMemory(from: model.mnca.shapes[0].pixels17x17, byteCount: 17*17 * MemoryLayout<Int32>.stride)
+        arraysUsed[0] = 1; arraysUsed[3] = 1;
 
+        func checkArray(array: inout Array<Int32>, count: Int) -> Int32 {
+            var used: Int32 = 0
+            
+            for i in 0..<count {
+                if array[i] == 1 {
+                    used = 1
+                    break
+                }
+            }
+            return used
+        }
+        
+        let shapeArrayCount = 17*17
+        
+        arraysUsed[1] = checkArray(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
+        arraysUsed[2] = checkArray(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
+
+        arraysUsed[4] = checkArray(array: &model.mnca.rules[1].ruleValues, count: 200)
+        arraysUsed[5] = checkArray(array: &model.mnca.rules[2].ruleValues, count: 200)
+        arraysUsed[6] = checkArray(array: &model.mnca.rules[3].ruleValues, count: 200)
+        
+        // Create or update update the MTLBuffers
+
+        if shapeABuffer == nil {
+            // Create all buffers
+            
+            func createBuffer(array: inout Array<Int32>, count: Int) -> MTLBuffer? {
+                array.withUnsafeMutableBytes { ptr in
+                    return view?.device!.makeBuffer(bytes: ptr.baseAddress!, length: count * MemoryLayout<Int32>.stride, options: [])!
+                }
+            }
+            
+            shapeABuffer = createBuffer(array: &model.mnca.shapes[0].pixels17x17, count: shapeArrayCount)
+            shapeBBuffer = createBuffer(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
+            shapeCBuffer = createBuffer(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
+                        
+            rule1Buffer = createBuffer(array: &model.mnca.rules[0].ruleValues, count: 200)
+            rule2Buffer = createBuffer(array: &model.mnca.rules[1].ruleValues, count: 200)
+            rule3Buffer = createBuffer(array: &model.mnca.rules[2].ruleValues, count: 200)
+            rule4Buffer = createBuffer(array: &model.mnca.rules[3].ruleValues, count: 200)
+            
+            buffersUsed = createBuffer(array: &arraysUsed, count: 7)
+        } else {
+            // Update only the buffers which are used
+            
+            shapeABuffer!.contents().copyMemory(from: model.mnca.shapes[0].pixels17x17, byteCount: shapeArrayCount * MemoryLayout<Int32>.stride)
+            if arraysUsed[1] == 1 {
+                shapeBBuffer!.contents().copyMemory(from: model.mnca.shapes[1].pixels17x17, byteCount: shapeArrayCount * MemoryLayout<Int32>.stride)
+            }
+            if arraysUsed[2] == 2 {
+                shapeCBuffer!.contents().copyMemory(from: model.mnca.shapes[2].pixels17x17, byteCount: shapeArrayCount * MemoryLayout<Int32>.stride)
+            }
+
+            rule1Buffer!.contents().copyMemory(from: model.mnca.rules[0].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+            if arraysUsed[4] == 1 {
+                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[1].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+            }
+            if arraysUsed[5] == 1 {
+                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[2].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+            }
+            if arraysUsed[6] == 1 {
+                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[3].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+            }
         }
         
         pingPong = false
@@ -122,13 +189,11 @@ class Renderer {
         }
         
         checkTextures()
-        
-        if needsReset == true {
-            compile()
+
+        if needsReset {
             reset()
-            return
         }
-        
+                
         guard let texture = valueTexture else {
             return
         }
@@ -153,7 +218,17 @@ class Renderer {
                 }
                     
                 computeEncoder.setBuffer(shapeABuffer, offset: 0, index: 2)
-                computeEncoder.setTexture( resultTexture, index: 3 )
+                computeEncoder.setBuffer(shapeBBuffer, offset: 0, index: 3)
+                computeEncoder.setBuffer(shapeCBuffer, offset: 0, index: 4)
+                
+                computeEncoder.setBuffer(rule1Buffer, offset: 0, index: 5)
+                computeEncoder.setBuffer(rule2Buffer, offset: 0, index: 6)
+                computeEncoder.setBuffer(rule3Buffer, offset: 0, index: 7)
+                computeEncoder.setBuffer(rule4Buffer, offset: 0, index: 8)
+
+                computeEncoder.setBuffer(buffersUsed, offset: 0, index: 9)
+
+                computeEncoder.setTexture(resultTexture, index: 10)
 
                 calculateThreadGroups(evalShapes, computeEncoder, texture.width, texture.height)
             }
@@ -283,6 +358,8 @@ class Renderer {
         return computePipelineState
     }
     
+    #if false
+    // Unused right now, initially I wanted to dynamically compile the shader.
     func compile()
     {
         var code =
@@ -302,49 +379,6 @@ class Renderer {
                                texture2d<half, access::write> resultTexture     [[texture(3)]],
                                uint2 gid                                        [[thread_position_in_grid]])
         {
-            int2 size = int2(valueTexture.get_width(), valueTexture.get_height());
-
-            int count = 0;
-            
-            int loop = 0;
-            int2 g = int2(gid.x, gid.y);
-            
-            for (int y = 0; y < 17; y += 1) {
-                for (int x = 0; x < 17; x += 1) {
-                    
-                    if (shapeA[loop] == 1) {
-                        
-                        int2 offset = int2(x - 8, y - 8);
-                        
-                        count += valueTexture.read(wrap(g -  offset, size)).x;
-                    }
-                    
-                    loop += 1;
-                }
-            }
-
-            int current = valueTexture.read(gid).x;
-            
-            // Rules
-            
-            half value = 0;
-            half4 result = 0;
-            
-            if (count == 2 && current == 1) {
-                value = 1;
-                result = half4(0, 0, 1, 1);
-            } else
-            if (count == 3)
-            {
-                value = 1;
-                result = half4(1, 1, 1, 1);
-            } else {
-                value = 0;
-                result = 0;
-            }
-            
-            valueTextureOut.write(value, gid);
-            resultTexture.write(result, gid);
         }
         """
         
@@ -363,4 +397,5 @@ class Renderer {
         
         view?.device?.makeLibrary(source: code, options: nil, completionHandler: compiledCB)
     }
+    #endif
 }

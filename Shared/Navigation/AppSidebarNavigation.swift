@@ -31,7 +31,7 @@ struct AppSidebarNavigation: View {
                 }
                 
                 NavigationLink(tag: NavigationItem.rules, selection: $selection) {
-                    Text("Rules")
+                    RuleList()
                 } label: {
                     Label("Rules", systemImage: "list.bullet")
                 }
@@ -49,7 +49,7 @@ struct AppSidebarNavigation: View {
         .toolbar {
             ToolbarItemGroup(placement: .automatic) {
 
-                if selection == .shapes {
+                if selection == .shapes || selection == .rules {
                     Button(action: {
                         model.showPreview.toggle()
                     }) {

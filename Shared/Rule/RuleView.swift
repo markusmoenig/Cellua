@@ -1,49 +1,72 @@
 //
-//  ShapeView.swift
+//  RuleView.swift
 //  Cellua
 //
-//  Created by Markus Moenig on 13/6/21.
+//  Created by Markus Moenig on 14/6/21.
 //
 
 import SwiftUI
 
-struct ShapeView: View {
+struct RuleView: View {
     
-    var shape               : Shape
+    var rule             : Rule
     
     @EnvironmentObject private var model: Model
-    @State var currentIndex : Int? = nil
+    @State private var modeText : String
     
-    init(shape: Shape)
-    {
-        self.shape = shape
+    @State private var currentIndex : Int? = nil
+
+    
+    init(rule: Rule) {
+        self.rule = rule
+        
+        _modeText = State(initialValue: rule.mode == .Absolute ? "Absolute" : "Average")
     }
     
     var body: some View {
-                    
+        
         let columns = [
             GridItem(.adaptive(minimum: 20), spacing: 1)
         ]
         
-        VStack {
+        VStack {            
+            HStack {
+                Menu {
+                    Button(action: {
+                        rule.mode = .Absolute
+                        modeText = "Absolute"
+                    }) {
+                        Text("Absolute")
+                    }
+                    
+                    Button(action: {
+                        rule.mode = .Average
+                        modeText = "Average"
+                    }) {
+                        Text("Average")
+                    }
+                } label: {
+                    Text(modeText)
+                }
+            }
             
             Spacer()
 
             LazyVGrid(columns: columns, spacing: 1) {
-                ForEach(0..<17*17) { index in
+                ForEach(0..<100) { index in
                     ZStack {
                         Rectangle()
                             .fill(getColorForIndex(index))
                             .frame(width: 20, height: 20)
                             .onTapGesture(perform: {
                                 
-                                if shape.pixels17x17[index] == 1 {
-                                    shape.pixels17x17[index] = 0
+                                if rule.ruleValues[index] == 1 {
+                                    rule.ruleValues[index] = 0
                                     model.renderer.needsReset = true
                                     currentIndex = index
                                 } else
-                                if shape.pixels17x17[index] == 0 {
-                                    shape.pixels17x17[index] = 1
+                                if rule.ruleValues[index] == 0 {
+                                    rule.ruleValues[index] = 1
                                     model.renderer.needsReset = true
                                     currentIndex = index
                                 }
@@ -53,13 +76,14 @@ struct ShapeView: View {
                             })
                             .padding(0)
                         
+                        Text(rule.ruleValues[index] == 0 ? "0" : "1")
                         
-                        if index == currentIndex {                            
+                        if index == currentIndex {
                         }
                     }
                 }
             }
-            .frame(maxWidth: 17*20 + 16)
+            .frame(maxWidth: 10*20 + 9)
             
             Spacer()
             
@@ -67,28 +91,19 @@ struct ShapeView: View {
                 MetalView()
                     .frame(maxHeight: 100)
             }
-
         }
         
 #if os(macOS)
         .frame(minWidth: 400, idealWidth: 700, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
 #endif
         
-        .navigationTitle(shape.name)
+        .navigationTitle(rule.name)
         .animation(.default)//, value: 1)
     }
     
-    /// Returns the appropriate color for the given shape index, right now only black / white if 0 / 1
+    /// Returns the right color for the index
     func getColorForIndex(_ index: Int) -> Color {
-        
-        if shape.pixels17x17[index] == -1 {
-            return .red
-        } else
-        if shape.pixels17x17[index] == 1 {
-            return .white
-        }
         
         return .black
     }
 }
-

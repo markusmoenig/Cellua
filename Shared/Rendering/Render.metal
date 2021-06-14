@@ -37,7 +37,14 @@ uint2 wrap(int2 gid, int2 size) {
 kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[texture(0)]],
                        texture2d<half, access::write> valueTextureOut   [[texture(1)]],
                        constant int *shapeA                             [[buffer(2)]],
-                       texture2d<half, access::write> resultTexture     [[texture(3)]],
+                       constant int *shapeB                             [[buffer(3)]],
+                       constant int *shapeC                             [[buffer(4)]],
+                       constant int *rules1                             [[buffer(5)]],
+                       constant int *rules2                             [[buffer(6)]],
+                       constant int *rules3                             [[buffer(7)]],
+                       constant int *rules4                             [[buffer(8)]],
+                       constant int *buffersUsed                        [[buffer(9)]],
+                       texture2d<half, access::write> resultTexture     [[texture(10)]],
                        uint2 gid                                        [[thread_position_in_grid]])
 {
     int2 size = int2(valueTexture.get_width(), valueTexture.get_height());
@@ -68,6 +75,7 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
     half value = 0;
     half4 result = 0;
     
+    /*
     if (count == 2 && current == 1) {
         value = 1;
         result = half4(0, 0, 1, 1);
@@ -79,6 +87,17 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
     } else {
         value = 0;
         result = 0;
+    }*/
+    
+    for (int i = 0; i < 100; ++i) {
+        if (rules1[i] == 1) {
+            if (count == i) {
+                if (current == 1) {
+                    value = 1;
+                    result = half4(1, 1, 1, 1);
+                }
+            }
+        }
     }
     
     valueTextureOut.write(value, gid);

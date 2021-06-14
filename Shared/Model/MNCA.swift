@@ -10,6 +10,7 @@ import Foundation
 class MNCA : Codable, Equatable {
     
     var shapes          : [Shape] = []
+    var rules           : [Rule] = []
     var id              = UUID()
     var name            = ""
     
@@ -17,6 +18,7 @@ class MNCA : Codable, Equatable {
         case id
         case name
         case shapes
+        case rules
     }
     
     init(_ name: String = "Unnamed")
@@ -26,6 +28,11 @@ class MNCA : Codable, Equatable {
         shapes.append(Shape("Shape A"))
         shapes.append(Shape("Shape B"))
         shapes.append(Shape("Shape C"))
+        
+        rules.append(Rule("Rule #1"))
+        rules.append(Rule("Rule #2"))
+        rules.append(Rule("Rule #3"))
+        rules.append(Rule("Rule #4"))
     }
     
     required init(from decoder: Decoder) throws
@@ -34,6 +41,7 @@ class MNCA : Codable, Equatable {
         id = try container.decode(UUID.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         shapes = try container.decode([Shape].self, forKey: .shapes)
+        rules = try container.decode([Rule].self, forKey: .rules)
     }
     
     func encode(to encoder: Encoder) throws
@@ -42,6 +50,7 @@ class MNCA : Codable, Equatable {
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
         try container.encode(shapes, forKey: .shapes)
+        try container.encode(rules, forKey: .rules)
     }
     
     static func ==(lhs: MNCA, rhs: MNCA) -> Bool {
