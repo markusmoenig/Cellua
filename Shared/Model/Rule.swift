@@ -17,11 +17,16 @@ class Rule : Codable, Equatable, Hashable {
         case Absolute, Average
     }
     
+    enum RulePolicy : Int, Codable {
+        case Ignore, Zero, One
+    }
+    
     var id              = UUID()
     var name            = ""
     
     var shape           : RuleShape = .ShapeA
     var mode            : RuleMode = .Absolute
+    var policy          : RulePolicy = .Ignore
 
     /// Contains 100 rule values and their meta data
     var ruleValues      : [Int32]
@@ -31,6 +36,7 @@ class Rule : Codable, Equatable, Hashable {
         case name
         case shape
         case mode
+        case policy
         case ruleValues
     }
     
@@ -48,6 +54,7 @@ class Rule : Codable, Equatable, Hashable {
         name = try container.decode(String.self, forKey: .name)
         shape = try container.decode(RuleShape.self, forKey: .shape)
         mode = try container.decode(RuleMode.self, forKey: .mode)
+        policy = try container.decode(RulePolicy.self, forKey: .policy)
         ruleValues = try container.decode([Int32].self, forKey: .ruleValues)
     }
     
@@ -58,6 +65,7 @@ class Rule : Codable, Equatable, Hashable {
         try container.encode(name, forKey: .name)
         try container.encode(shape, forKey: .shape)
         try container.encode(mode, forKey: .mode)
+        try container.encode(policy, forKey: .policy)
         try container.encode(ruleValues, forKey: .ruleValues)
     }
     

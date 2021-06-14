@@ -105,13 +105,14 @@ class Renderer {
         }
         
         let shapeArrayCount = 17*17
-        
+        let ruleArrayCount = 400
+
         arraysUsed[1] = checkArray(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
         arraysUsed[2] = checkArray(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
 
-        arraysUsed[4] = checkArray(array: &model.mnca.rules[1].ruleValues, count: 200)
-        arraysUsed[5] = checkArray(array: &model.mnca.rules[2].ruleValues, count: 200)
-        arraysUsed[6] = checkArray(array: &model.mnca.rules[3].ruleValues, count: 200)
+        arraysUsed[4] = checkArray(array: &model.mnca.rules[1].ruleValues, count: ruleArrayCount)
+        arraysUsed[5] = checkArray(array: &model.mnca.rules[2].ruleValues, count: ruleArrayCount)
+        arraysUsed[6] = checkArray(array: &model.mnca.rules[3].ruleValues, count: ruleArrayCount)
         
         // Create or update update the MTLBuffers
 
@@ -128,10 +129,10 @@ class Renderer {
             shapeBBuffer = createBuffer(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
             shapeCBuffer = createBuffer(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
                         
-            rule1Buffer = createBuffer(array: &model.mnca.rules[0].ruleValues, count: 200)
-            rule2Buffer = createBuffer(array: &model.mnca.rules[1].ruleValues, count: 200)
-            rule3Buffer = createBuffer(array: &model.mnca.rules[2].ruleValues, count: 200)
-            rule4Buffer = createBuffer(array: &model.mnca.rules[3].ruleValues, count: 200)
+            rule1Buffer = createBuffer(array: &model.mnca.rules[0].ruleValues, count: ruleArrayCount)
+            rule2Buffer = createBuffer(array: &model.mnca.rules[1].ruleValues, count: ruleArrayCount)
+            rule3Buffer = createBuffer(array: &model.mnca.rules[2].ruleValues, count: ruleArrayCount)
+            rule4Buffer = createBuffer(array: &model.mnca.rules[3].ruleValues, count: ruleArrayCount)
             
             buffersUsed = createBuffer(array: &arraysUsed, count: 7)
         } else {
@@ -145,15 +146,15 @@ class Renderer {
                 shapeCBuffer!.contents().copyMemory(from: model.mnca.shapes[2].pixels17x17, byteCount: shapeArrayCount * MemoryLayout<Int32>.stride)
             }
 
-            rule1Buffer!.contents().copyMemory(from: model.mnca.rules[0].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+            rule1Buffer!.contents().copyMemory(from: model.mnca.rules[0].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
             if arraysUsed[4] == 1 {
-                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[1].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[1].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
             }
             if arraysUsed[5] == 1 {
-                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[2].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[2].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
             }
             if arraysUsed[6] == 1 {
-                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[3].ruleValues, byteCount: 200 * MemoryLayout<Int32>.stride)
+                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[3].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
             }
         }
         

@@ -59,7 +59,7 @@ struct ShapeView: View {
                     }
                 }
             }
-            .frame(maxWidth: 17*20 + 16)
+            .frame(maxWidth: 17 * 20 + 16)
             
             Spacer()
             

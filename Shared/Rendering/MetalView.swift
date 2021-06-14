@@ -54,19 +54,21 @@ public class CTKView        : MTKView
             drawables?.encodeEnd()
         }
     }
-
-    #if os(OSX)
-        
-    override public var acceptsFirstResponder: Bool { return true }
     
     /// Setup the view
     func platformInit(_ renderer: Renderer)
     {
         self.renderer = renderer
         drawables = MetalDrawables(self)
+        #if os(OSX)
         layer?.isOpaque = false
+        #endif
     }
     
+    #if os(OSX)
+
+    override public var acceptsFirstResponder: Bool { return true }
+
     #endif
 }
 
@@ -140,14 +142,9 @@ struct MetalView: NSViewRepresentable {
 #else
 struct MetalView: UIViewRepresentable {
     typealias UIViewType = MTKView
-    var core             : Core!
 
-    var viewType            : DMTKView.MetalViewType
-
-    init(_ core: Core,_ viewType: DMTKView.MetalViewType)
+    init()
     {
-        self.core = core
-        self.viewType = viewType
     }
     
     func makeCoordinator() -> Coordinator {
@@ -155,9 +152,8 @@ struct MetalView: UIViewRepresentable {
     }
     
     func makeUIView(context: UIViewRepresentableContext<MetalView>) -> MTKView {
-        let mtkView = DMTKView()
-        mtkView.core = core
-        mtkView.viewType = viewType
+        let mtkView = CTKView()
+        
         mtkView.delegate = context.coordinator
         mtkView.preferredFramesPerSecond = 60
         mtkView.enableSetNeedsDisplay = true
@@ -169,13 +165,6 @@ struct MetalView: UIViewRepresentable {
         mtkView.drawableSize = mtkView.frame.size
         mtkView.enableSetNeedsDisplay = true
         mtkView.isPaused = true
-                
-        if viewType == .Preview {
-            core.setupView(mtkView)
-        } else
-        if viewType == .Nodes {
-            core.setupNodesView(mtkView)
-        }
         
         return mtkView
     }
@@ -201,11 +190,8 @@ struct MetalView: UIViewRepresentable {
         }
         
         func draw(in view: MTKView) {
-            if parent.viewType == .Preview {
-                parent.core.drawPreview()
-            } else
-            if parent.viewType == .Nodes {
-                parent.core.drawNodes()
+            if let ctkView = view as? CTKView {
+                ctkView.update()
             }
         }
     }

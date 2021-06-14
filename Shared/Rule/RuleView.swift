@@ -12,8 +12,10 @@ struct RuleView: View {
     var rule             : Rule
     
     @EnvironmentObject private var model: Model
-    @State private var modeText : String
     
+    @State private var modeText : String
+    @State private var policyText : String
+
     @State private var currentIndex : Int? = nil
 
     
@@ -21,33 +23,64 @@ struct RuleView: View {
         self.rule = rule
         
         _modeText = State(initialValue: rule.mode == .Absolute ? "Absolute" : "Average")
+        _policyText = State(initialValue: rule.policy == .Ignore ? "Ignore" : (rule.policy == .Zero ? "0" : "1"))
     }
     
     var body: some View {
         
         let columns = [
-            GridItem(.adaptive(minimum: 20), spacing: 1)
+            GridItem(.adaptive(minimum: 30), spacing: 1)
         ]
         
         VStack {            
             HStack {
-                Menu {
-                    Button(action: {
-                        rule.mode = .Absolute
-                        modeText = "Absolute"
-                    }) {
-                        Text("Absolute")
+                VStack {
+                    Text("Pixel values")
+                    Menu {
+                        Button(action: {
+                            rule.mode = .Absolute
+                            modeText = "Absolute"
+                        }) {
+                            Text("Absolute")
+                        }
+                        
+                        Button(action: {
+                            rule.mode = .Average
+                            modeText = "Average"
+                        }) {
+                            Text("Average")
+                        }
+                    } label: {
+                        Text(modeText)
                     }
-                    
-                    Button(action: {
-                        rule.mode = .Average
-                        modeText = "Average"
-                    }) {
-                        Text("Average")
+                }.padding()
+                VStack {
+                    Text("Current value")
+                    Menu {
+                        Button(action: {
+                            rule.policy = .Ignore
+                            policyText = "Ignore"
+                        }) {
+                            Text("Ignore")
+                        }
+                        
+                        Button(action: {
+                            rule.policy = .Zero
+                            policyText = "0"
+                        }) {
+                            Text("0")
+                        }
+                        
+                        Button(action: {
+                            rule.policy = .One
+                            policyText = "1"
+                        }) {
+                            Text("1")
+                        }
+                    } label: {
+                        Text(policyText)
                     }
-                } label: {
-                    Text(modeText)
-                }
+                }.padding()
             }
             
             Spacer()
@@ -57,33 +90,22 @@ struct RuleView: View {
                     ZStack {
                         Rectangle()
                             .fill(getColorForIndex(index))
-                            .frame(width: 20, height: 20)
+                            .frame(width: 30, height: 30)
                             .onTapGesture(perform: {
-                                
-                                if rule.ruleValues[index] == 1 {
-                                    rule.ruleValues[index] = 0
-                                    model.renderer.needsReset = true
-                                    currentIndex = index
-                                } else
-                                if rule.ruleValues[index] == 0 {
-                                    rule.ruleValues[index] = 1
-                                    model.renderer.needsReset = true
-                                    currentIndex = index
-                                }
-                                
                                 currentIndex = nil
-
+                                clickedOnIndex(index)
                             })
                             .padding(0)
                         
                         Text(rule.ruleValues[index] == 0 ? "0" : "1")
+                            .allowsHitTesting(false)
                         
                         if index == currentIndex {
                         }
                     }
                 }
             }
-            .frame(maxWidth: 10*20 + 9)
+            .frame(maxWidth: 10 * 30 + 9)
             
             Spacer()
             
@@ -101,9 +123,22 @@ struct RuleView: View {
         .animation(.default)//, value: 1)
     }
     
+    ///
+    func clickedOnIndex(_ index: Int) {
+        if rule.ruleValues[index] == 1 {
+            rule.ruleValues[index] = 0
+            model.renderer.needsReset = true
+            currentIndex = index
+        } else
+        if rule.ruleValues[index] == 0 {
+            rule.ruleValues[index] = 1
+            model.renderer.needsReset = true
+            currentIndex = index
+        }
+    }
+    
     /// Returns the right color for the index
     func getColorForIndex(_ index: Int) -> Color {
-        
         return .black
     }
 }
