@@ -8,8 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @EnvironmentObject private var model: Model
+
     var body: some View {
         AppSidebarNavigation()
+        
+        .onAppear(perform: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.model.renderer.isStarted = true
+            }
+        })
     }
 }
 

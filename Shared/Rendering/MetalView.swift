@@ -47,8 +47,7 @@ public class CTKView        : MTKView
         
         if drawables?.encodeStart(float4(0,0,0,0)) != nil {
             
-            
-            if let texture = renderer?.currentTexture {
+            if let texture = renderer?.resultTexture {
                 drawables?.drawBox(position: float2(0,0), size: float2(Float(texture.width), Float(texture.height)), rounding: 0, borderSize: 0, onion: 0, fillColor: float4(0,0,0,1), borderColor: float4(0,0,0,0), texture: texture)
             }
             

@@ -37,6 +37,7 @@ uint2 wrap(int2 gid, int2 size) {
 kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[texture(0)]],
                        texture2d<half, access::write> valueTextureOut   [[texture(1)]],
                        constant int *shapeA                             [[buffer(2)]],
+                       texture2d<half, access::write> resultTexture     [[texture(3)]],
                        uint2 gid                                        [[thread_position_in_grid]])
 {
     int2 size = int2(valueTexture.get_width(), valueTexture.get_height());
@@ -46,12 +47,12 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
     int loop = 0;
     int2 g = int2(gid.x, gid.y);
     
-    for (int y = 0; y < 9; y += 1) {
-        for (int x = 0; x < 9; x += 1) {
+    for (int y = 0; y < 17; y += 1) {
+        for (int x = 0; x < 17; x += 1) {
             
             if (shapeA[loop] == 1) {
                 
-                int2 offset = int2(x - 4, y - 4);
+                int2 offset = int2(x - 8, y - 8);
                 
                 count += valueTexture.read(wrap(g -  offset, size)).x;
             }
@@ -61,7 +62,25 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
     }
 
     int current = valueTexture.read(gid).x;
-    half result = ((count == 2 && current == 1) || (count == 3)) ? 1.0 : 0.0;
     
-    valueTextureOut.write(result, gid);
+    // Rules
+    
+    half value = 0;
+    half4 result = 0;
+    
+    if (count == 2 && current == 1) {
+        value = 1;
+        result = half4(0, 0, 1, 1);
+    } else
+    if (count == 3)
+    {
+        value = 1;
+        result = half4(1, 1, 1, 1);
+    } else {
+        value = 0;
+        result = 0;
+    }
+    
+    valueTextureOut.write(value, gid);
+    resultTexture.write(result, gid);
 }

@@ -12,20 +12,20 @@ class Shape : Codable, Equatable {
     var id              = UUID()
     var name            = ""
     
-    var pixels9x9       : [Int32]
+    var pixels17x17     : [Int32]
     
     private enum CodingKeys: String, CodingKey {
         case id
         case name
-        case pixels9x9
+        case pixels17x17
     }
     
     init(_ name: String = "Unnamed")
     {
         self.name = name
         
-        pixels9x9 = Array<Int32>(repeating: 0, count: 81)
-        pixels9x9[40] = -1
+        pixels17x17 = Array<Int32>(repeating: 0, count: 17*17)
+        pixels17x17[(17*17) / 2] = -1
     }
     
     required init(from decoder: Decoder) throws
@@ -33,7 +33,7 @@ class Shape : Codable, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
-        pixels9x9 = try container.decode([Int32].self, forKey: .pixels9x9)
+        pixels17x17 = try container.decode([Int32].self, forKey: .pixels17x17)
     }
     
     func encode(to encoder: Encoder) throws
@@ -41,7 +41,7 @@ class Shape : Codable, Equatable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
-        try container.encode(pixels9x9, forKey: .pixels9x9)
+        try container.encode(pixels17x17, forKey: .pixels17x17)
     }
     
     static func ==(lhs: Shape, rhs: Shape) -> Bool {

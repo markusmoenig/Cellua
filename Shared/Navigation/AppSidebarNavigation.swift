@@ -49,14 +49,11 @@ struct AppSidebarNavigation: View {
         .toolbar {
             ToolbarItemGroup(placement: .automatic) {
 
-                if selection == .shapes {                
-                    Button(previewText) {
-                        if model.showPreview == false {
-                            previewText = "Hide Preview"
-                        } else {
-                            previewText = "Show Preview"
-                        }
+                if selection == .shapes {
+                    Button(action: {
                         model.showPreview.toggle()
+                    }) {
+                        Image(systemName: model.showPreview ? "eye" : "eye.slash")
                     }
                 }
             }
