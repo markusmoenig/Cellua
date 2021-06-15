@@ -46,18 +46,6 @@ struct AppSidebarNavigation: View {
             .navigationTitle("Cellua")
         }
         
-        .toolbar {
-            ToolbarItemGroup(placement: .automatic) {
-
-                if selection == .shapes || selection == .rules {
-                    Button(action: {
-                        model.showPreview.toggle()
-                    }) {
-                        Image(systemName: model.showPreview ? "eye" : "eye.slash")
-                    }
-                }
-            }
-        }
         .animation(.default)//, value: 1)
     }
 }

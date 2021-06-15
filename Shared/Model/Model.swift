@@ -12,7 +12,7 @@ class Model: NSObject, ObservableObject {
     var ctkView     : CTKView!
     var renderer    = Renderer()
     
-    @Published var showPreview = true
+    @Published var showPreview = false
     
     var mnca        : MNCA
     

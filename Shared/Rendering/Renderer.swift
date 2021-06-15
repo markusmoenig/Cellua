@@ -52,11 +52,18 @@ class Renderer {
     
     var arraysUsed      : [Int32]
     var buffersUsed     : MTLBuffer? = nil
+    
+    // RulesMetaData
+    
+    var arraysMetaData  : [Int32]
+    var buffersMetaData : MTLBuffer? = nil
 
     var isStarted       = false
 
     init() {
         arraysUsed = Array<Int32>(repeating: 0, count: 7)
+        // 5 Ints per rule * 4
+        arraysMetaData = Array<Int32>(repeating: 0, count: 20)
     }
     
     deinit {
@@ -105,7 +112,7 @@ class Renderer {
         }
         
         let shapeArrayCount = 17*17
-        let ruleArrayCount = 400
+        let ruleArrayCount = 200
 
         arraysUsed[1] = checkArray(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
         arraysUsed[2] = checkArray(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
@@ -113,6 +120,23 @@ class Renderer {
         arraysUsed[4] = checkArray(array: &model.mnca.rules[1].ruleValues, count: ruleArrayCount)
         arraysUsed[5] = checkArray(array: &model.mnca.rules[2].ruleValues, count: ruleArrayCount)
         arraysUsed[6] = checkArray(array: &model.mnca.rules[3].ruleValues, count: ruleArrayCount)
+        
+        // Copy the rules to the meta data buffers, 5 Int32 per rule
+        
+        // Offset 0: Shape Nr
+        // Offset 1: Mode (Absolute / Average)
+        // Offset 2: Policy
+        
+        var offset = 0
+        for i in 0..<4 {
+            let rule = model.mnca.rules[i]
+                        
+            arraysMetaData[offset] = Int32(rule.shape.rawValue)
+            arraysMetaData[offset + 1] = Int32(rule.mode.rawValue)
+            arraysMetaData[offset + 2] = Int32(rule.policy.rawValue)
+            
+            offset += 5
+        }
         
         // Create or update update the MTLBuffers
 
@@ -135,6 +159,7 @@ class Renderer {
             rule4Buffer = createBuffer(array: &model.mnca.rules[3].ruleValues, count: ruleArrayCount)
             
             buffersUsed = createBuffer(array: &arraysUsed, count: 7)
+            buffersMetaData = createBuffer(array: &arraysMetaData, count: 20)
         } else {
             // Update only the buffers which are used
             
@@ -156,6 +181,10 @@ class Renderer {
             if arraysUsed[6] == 1 {
                 rule2Buffer!.contents().copyMemory(from: model.mnca.rules[3].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
             }
+            
+            buffersUsed!.contents().copyMemory(from: arraysUsed, byteCount: arraysUsed.count * MemoryLayout<Int32>.stride)
+            
+            buffersMetaData!.contents().copyMemory(from: arraysMetaData, byteCount: arraysMetaData.count * MemoryLayout<Int32>.stride)
         }
         
         pingPong = false
@@ -228,8 +257,9 @@ class Renderer {
                 computeEncoder.setBuffer(rule4Buffer, offset: 0, index: 8)
 
                 computeEncoder.setBuffer(buffersUsed, offset: 0, index: 9)
+                computeEncoder.setBuffer(buffersMetaData, offset: 0, index: 10)
 
-                computeEncoder.setTexture(resultTexture, index: 10)
+                computeEncoder.setTexture(resultTexture, index: 11)
 
                 calculateThreadGroups(evalShapes, computeEncoder, texture.width, texture.height)
             }
@@ -239,6 +269,11 @@ class Renderer {
         stopCompute(waitUntilCompleted: true)
         
         pingPong.toggle()
+    }
+    
+    /// Called from the outside to restart the renderer
+    func update() {
+        needsReset = true
     }
     
     /// Check if all textures have the correct size

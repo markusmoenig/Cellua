@@ -44,7 +44,7 @@ class Rule : Codable, Equatable, Hashable {
     {
         self.name = name
         
-        ruleValues = Array<Int32>(repeating: 0, count: 400)
+        ruleValues = Array<Int32>(repeating: 0, count: 200)
     }
     
     required init(from decoder: Decoder) throws

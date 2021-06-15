@@ -11,19 +11,19 @@ struct RuleView: View {
     
     var rule             : Rule
     
-    @EnvironmentObject private var model: Model
+    @EnvironmentObject private var model    : Model
     
-    @State private var modeText : String
-    @State private var policyText : String
+    @State private var modeImage            : String
+    @State private var policyImage          : String
 
-    @State private var currentIndex : Int? = nil
+    @State private var currentIndex         : Int? = nil
 
     
     init(rule: Rule) {
         self.rule = rule
         
-        _modeText = State(initialValue: rule.mode == .Absolute ? "Absolute" : "Average")
-        _policyText = State(initialValue: rule.policy == .Ignore ? "Ignore" : (rule.policy == .Zero ? "0" : "1"))
+        _modeImage = State(initialValue: rule.mode == .Absolute ? "textformat.123" : "percent")
+        _policyImage = State(initialValue: rule.policy == .Ignore ? "square" : (rule.policy == .Zero ? "0.square" : "1.square"))
     }
     
     var body: some View {
@@ -32,95 +32,113 @@ struct RuleView: View {
             GridItem(.adaptive(minimum: 30), spacing: 1)
         ]
         
-        VStack {            
-            HStack {
-                VStack {
-                    Text("Pixel values")
-                    Menu {
-                        Button(action: {
-                            rule.mode = .Absolute
-                            modeText = "Absolute"
-                        }) {
-                            Text("Absolute")
-                        }
-                        
-                        Button(action: {
-                            rule.mode = .Average
-                            modeText = "Average"
-                        }) {
-                            Text("Average")
-                        }
-                    } label: {
-                        Text(modeText)
-                    }
-                }.padding()
-                VStack {
-                    Text("Current value")
-                    Menu {
-                        Button(action: {
-                            rule.policy = .Ignore
-                            policyText = "Ignore"
-                        }) {
-                            Text("Ignore")
-                        }
-                        
-                        Button(action: {
-                            rule.policy = .Zero
-                            policyText = "0"
-                        }) {
-                            Text("0")
-                        }
-                        
-                        Button(action: {
-                            rule.policy = .One
-                            policyText = "1"
-                        }) {
-                            Text("1")
-                        }
-                    } label: {
-                        Text(policyText)
-                    }
-                }.padding()
-            }
+        ZStack {
             
-            Spacer()
+            MetalView()
+                .opacity(model.showPreview ? 1 : 0.2)
+        
+            if model.showPreview == false {
+                VStack {
 
-            LazyVGrid(columns: columns, spacing: 1) {
-                ForEach(0..<100) { index in
-                    ZStack {
-                        Rectangle()
-                            .fill(getColorForIndex(index))
-                            .frame(width: 30, height: 30)
-                            .onTapGesture(perform: {
-                                currentIndex = nil
-                                clickedOnIndex(index)
-                            })
-                            .padding(0)
-                        
-                        Text(rule.ruleValues[index] == 0 ? "0" : "1")
-                            .allowsHitTesting(false)
-                        
-                        if index == currentIndex {
+                    Spacer()
+
+                    LazyVGrid(columns: columns, spacing: 1) {
+                        ForEach(0..<100) { index in
+                            ZStack {
+                                Rectangle()
+                                    .fill(getColorForIndex(index))
+                                    .frame(width: 30, height: 30)
+                                    .onTapGesture(perform: {
+                                        currentIndex = nil
+                                        clickedOnIndex(index)
+                                    })
+                                    .padding(0)
+                                
+                                Text(rule.ruleValues[index] == 0 ? "0" : "1")
+                                    .allowsHitTesting(false)
+                                
+                                if index == currentIndex {
+                                }
+                            }
                         }
                     }
+                    .frame(maxWidth: 10 * 30 + 9)
+                    
+                    Spacer()
                 }
             }
-            .frame(maxWidth: 10 * 30 + 9)
-            
-            Spacer()
-            
-            if model.showPreview {
-                MetalView()
-                    .frame(maxHeight: 100)
-            }
         }
-        
-#if os(macOS)
+            
+        #if os(macOS)
         .frame(minWidth: 400, idealWidth: 700, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
-#endif
+        #endif
         
         .navigationTitle(rule.name)
-        .animation(.default)//, value: 1)
+        .animation(.linear)//, value: 1)
+        
+        .toolbar {
+            ToolbarItemGroup(placement: .automatic) {
+
+                Menu {
+                    Button(action: {
+                        rule.mode = .Absolute
+                        modeImage = "textformat.123"
+                        model.renderer.update()
+                    }) {
+                        Text("Absolute")
+                        Image(systemName: "textformat.123")
+                    }
+                    
+                    Button(action: {
+                        rule.mode = .Average
+                        modeImage = "percent"
+                        model.renderer.update()
+                    }) {
+                        Text("Average")
+                        Image(systemName: "percent")
+                    }
+                } label: {
+                    Image(systemName: modeImage)
+                }
+                
+                Menu {
+                    Button(action: {
+                        rule.policy = .Ignore
+                        policyImage = "square"
+                        model.renderer.update()
+                    }) {
+                        Text("Ignore Current Value")
+                        Image(systemName: "square")
+                    }
+                    
+                    Button(action: {
+                        rule.policy = .Zero
+                        policyImage = "0.square"
+                        model.renderer.update()
+                    }) {
+                        Text("Current Value is 0")
+                        Image(systemName: "0.square")
+                    }
+                    
+                    Button(action: {
+                        rule.policy = .One
+                        policyImage = "1.square"
+                        model.renderer.update()
+                    }) {
+                        Text("Current Value is 1")
+                        Image(systemName: "1.square")
+                    }
+                } label: {
+                    Image(systemName: policyImage)
+                }
+                
+                Button(action: {
+                    model.showPreview.toggle()
+                }) {
+                    Image(systemName: model.showPreview ? "eye" : "eye.slash")
+                }
+            }
+        }
     }
     
     ///
