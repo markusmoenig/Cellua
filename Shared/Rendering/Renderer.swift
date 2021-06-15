@@ -58,8 +58,6 @@ class Renderer {
     var arraysMetaData  : [Int32]
     var buffersMetaData : MTLBuffer? = nil
 
-    var isStarted       = false
-
     init() {
         arraysUsed = Array<Int32>(repeating: 0, count: 7)
         // 5 Ints per rule * 4
@@ -214,10 +212,6 @@ class Renderer {
     /// Render a frame
     func render()
     {
-        if isStarted == false {
-            return
-        }
-        
         checkTextures()
 
         if needsReset {

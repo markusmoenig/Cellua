@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Shape : Codable, Equatable {
+class Shape : Codable, Equatable, Hashable {
     
     var id              = UUID()
     var name            = ""
@@ -46,5 +46,9 @@ class Shape : Codable, Equatable {
     
     static func ==(lhs: Shape, rhs: Shape) -> Bool {
         return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

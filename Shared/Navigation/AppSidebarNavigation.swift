@@ -18,20 +18,18 @@ struct AppSidebarNavigation: View {
 
     @EnvironmentObject private var model: Model
     @State private var selection: NavigationItem? = .shapes
-    
-    @State var previewText = "Hide Preview"
-    
+        
     var body: some View {
         NavigationView {
             List {
                 NavigationLink(tag: NavigationItem.shapes, selection: $selection) {
-                    ShapeList()
+                    ShapeView()
                 } label: {
                     Label("Shapes", systemImage: "square")
                 }
                 
                 NavigationLink(tag: NavigationItem.rules, selection: $selection) {
-                    RuleList()
+                    RuleView()
                 } label: {
                     Label("Rules", systemImage: "list.bullet")
                 }
@@ -42,10 +40,9 @@ struct AppSidebarNavigation: View {
                     Label("Preview", systemImage: "list.bullet")
                 }
             }
-            
-            .navigationTitle("Cellua")
         }
         
+        .navigationTitle("Cellua")        
         .animation(.default)//, value: 1)
     }
 }

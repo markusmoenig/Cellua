@@ -93,14 +93,13 @@ class MetalDrawables
         viewSize = float2(Float(metalView.bounds.width), Float(metalView.bounds.height))
 
         commandBuffer = commandQueue.makeCommandBuffer()!
+                
+        if let renderPassDescriptor = metalView.currentRenderPassDescriptor {
+            
+            renderPassDescriptor.colorAttachments[0].loadAction = .clear
+            renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor( red: Double(clearColor.x), green: Double(clearColor.y), blue: Double(clearColor.z), alpha: Double(clearColor.w))
         
-        let renderPassDescriptor = metalView.currentRenderPassDescriptor
-        
-        renderPassDescriptor!.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor!.colorAttachments[0].clearColor = MTLClearColor( red: Double(clearColor.x), green: Double(clearColor.y), blue: Double(clearColor.z), alpha: Double(clearColor.w))
-        
-        if renderPassDescriptor != nil {
-            renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor! )
+            renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor )
             return renderEncoder
         }
         

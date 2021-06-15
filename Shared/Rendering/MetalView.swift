@@ -44,7 +44,7 @@ public class CTKView        : MTKView
     func update()
     {
         renderer?.render()
-        
+
         if drawables?.encodeStart(float4(0,0,0,0)) != nil {
             
             if let texture = renderer?.resultTexture {
@@ -143,6 +143,8 @@ struct MetalView: NSViewRepresentable {
 struct MetalView: UIViewRepresentable {
     typealias UIViewType = MTKView
 
+    @EnvironmentObject private var model: Model
+
     init()
     {
     }
@@ -164,7 +166,9 @@ struct MetalView: UIViewRepresentable {
         mtkView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
         mtkView.drawableSize = mtkView.frame.size
         mtkView.enableSetNeedsDisplay = true
-        mtkView.isPaused = true
+        mtkView.isPaused = false
+        
+        model.setView(mtkView)
         
         return mtkView
     }
