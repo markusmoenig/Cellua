@@ -42,10 +42,9 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
                        constant int *rules1                             [[buffer(5)]],
                        constant int *rules2                             [[buffer(6)]],
                        constant int *rules3                             [[buffer(7)]],
-                       constant int *rules4                             [[buffer(8)]],
-                       constant int *buffersUsed                        [[buffer(9)]],
-                       constant int *buffersMetaData                    [[buffer(10)]],
-                       texture2d<half, access::write> resultTexture     [[texture(11)]],
+                       constant int *buffersUsed                        [[buffer(8)]],
+                       constant int *buffersMetaData                    [[buffer(9)]],
+                       texture2d<half, access::write> resultTexture     [[texture(10)]],
                        uint2 gid                                        [[thread_position_in_grid]])
 {
     int2 size = int2(valueTexture.get_width(), valueTexture.get_height());
@@ -73,29 +72,19 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
     
     // Rules
     
-    half value = 0;
+    half value = current;
     half4 result = 0;
     
     int metaDataOffset = 0;
     for (int i = 0; i < 100; ++i) {
-        if (rules1[i] == 1) {
+        if (rules1[i] != -1) {
             int mode = buffersMetaData[metaDataOffset + 1];
             if (mode == 0) {
                 // Absolute
                 if (count == i) {
-                    int policy = buffersMetaData[metaDataOffset + 2];
-                    if (policy == 0) {
-                        value = 1;
-                        result = half4(1, 1, 1, 1);
-                    } else
-                    if (current == 0 && policy == 1) {
-                        value = 1;
-                        result = half4(1, 1, 1, 1);
-                    } else
-                    if (current == 1 && policy == 2) {
-                        value = 1;
-                        result = half4(1, 1, 1, 1);
-                    }
+                    value = rules1[i];
+                    result = half4(1, 1, 1, 1);
+                    break;
                 }
             }
         }
@@ -104,24 +93,14 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
     if (buffersUsed[4] == 1) {
         metaDataOffset = 5;
         for (int i = 0; i < 100; ++i) {
-            if (rules2[i] == 1) {
+            if (rules2[i] != -1) {
                 int mode = buffersMetaData[metaDataOffset + 1];
                 if (mode == 0) {
                     // Absolute
                     if (count == i) {
-                        int policy = buffersMetaData[metaDataOffset + 2];
-                        if (policy == 0) {
-                            value = 1;
-                            result = half4(1, 1, 1, 1);
-                        } else
-                        if (current == 0 && policy == 1) {
-                            value = 1;
-                            result = half4(1, 1, 1, 1);
-                        } else
-                        if (current == 1 && policy == 2) {
-                            value = 1;
-                            result = half4(1, 1, 1, 1);
-                        }
+                        value = rules2[i];
+                        result = half4(1, 1, 1, 1);
+                        break;
                     }
                 }
             }

@@ -83,19 +83,19 @@ struct ShapeView: View {
                 Button(action: {
                     shape = model.mnca.shapes[0]
                 }) {
-                    Image(systemName: shape === model.mnca.shapes[0] ? "a.square.fill" : "a.square")
+                    Image(systemName: shape === model.mnca.shapes[0] ? "1.square.fill" : "1.square")
                 }
                 
                 Button(action: {
                     shape = model.mnca.shapes[1]
                 }) {
-                    Image(systemName: shape === model.mnca.shapes[1] ? "b.square.fill" : "b.square")
+                    Image(systemName: shape === model.mnca.shapes[1] ? "2.square.fill" : "2.square")
                 }
                 
                 Button(action: {
                     shape = model.mnca.shapes[2]
                 }) {
-                    Image(systemName: shape === model.mnca.shapes[2] ? "c.square.fill" : "c.square")
+                    Image(systemName: shape === model.mnca.shapes[2] ? "3.square.fill" : "3.square")
                 }
             }
         }

@@ -20,7 +20,7 @@ struct AppTabNavigation: View {
     var body: some View {
         TabView(selection: $selection) {
             NavigationView {
-                ShapeList()
+                ShapeView()
             }
             .tabItem {
                 let menuText = Text("Shapes", comment: "Shape menu tab title")
@@ -33,7 +33,7 @@ struct AppTabNavigation: View {
             .tag(Tab.shapes)
             
             NavigationView {
-                RuleList()
+                RuleView()
             }
             .tabItem {
                 Label {

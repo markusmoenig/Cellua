@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class MNCA : Codable, Equatable {
     
@@ -13,6 +14,8 @@ class MNCA : Codable, Equatable {
     var rules           : [Rule] = []
     var id              = UUID()
     var name            = ""
+    
+    var colors          : [PaletteColor] = []
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -25,14 +28,31 @@ class MNCA : Codable, Equatable {
     {
         self.name = name
         
-        shapes.append(Shape("Shape A"))
-        shapes.append(Shape("Shape B"))
-        shapes.append(Shape("Shape C"))
+        shapes.append(Shape("Shape #1"))
+        shapes.append(Shape("Shape #2"))
+        shapes.append(Shape("Shape #3"))
         
         rules.append(Rule("Rule #1"))
         rules.append(Rule("Rule #2"))
         rules.append(Rule("Rule #3"))
-        rules.append(Rule("Rule #4"))
+        
+        colors.append(PaletteColor(.white))
+        colors.append(PaletteColor(.black))
+        colors.append(PaletteColor(.blue))
+        colors.append(PaletteColor(.brown))
+        colors.append(PaletteColor(.clear))
+        colors.append(PaletteColor(.cyan))
+        colors.append(PaletteColor(.gray))
+        colors.append(PaletteColor(.green))
+        colors.append(PaletteColor(.indigo))
+        colors.append(PaletteColor(.mint))
+        colors.append(PaletteColor(.orange))
+        colors.append(PaletteColor(.pink))
+        colors.append(PaletteColor(.purple))
+        colors.append(PaletteColor(.red))
+        colors.append(PaletteColor(.red))
+        colors.append(PaletteColor(.teal))
+        colors.append(PaletteColor(.yellow))
     }
     
     required init(from decoder: Decoder) throws

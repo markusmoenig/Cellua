@@ -46,7 +46,6 @@ class Renderer {
     var rule1Buffer     : MTLBuffer? = nil
     var rule2Buffer     : MTLBuffer? = nil
     var rule3Buffer     : MTLBuffer? = nil
-    var rule4Buffer     : MTLBuffer? = nil
     
     // Usage indicator for each of the above 7 buffers
     
@@ -59,9 +58,9 @@ class Renderer {
     var buffersMetaData : MTLBuffer? = nil
 
     init() {
-        arraysUsed = Array<Int32>(repeating: 0, count: 7)
+        arraysUsed = Array<Int32>(repeating: 0, count: 6)
         // 5 Ints per rule * 4
-        arraysMetaData = Array<Int32>(repeating: 0, count: 20)
+        arraysMetaData = Array<Int32>(repeating: 0, count: 15)
     }
     
     deinit {
@@ -117,7 +116,6 @@ class Renderer {
 
         arraysUsed[4] = checkArray(array: &model.mnca.rules[1].ruleValues, count: ruleArrayCount)
         arraysUsed[5] = checkArray(array: &model.mnca.rules[2].ruleValues, count: ruleArrayCount)
-        arraysUsed[6] = checkArray(array: &model.mnca.rules[3].ruleValues, count: ruleArrayCount)
         
         // Copy the rules to the meta data buffers, 5 Int32 per rule
         
@@ -126,12 +124,11 @@ class Renderer {
         // Offset 2: Policy
         
         var offset = 0
-        for i in 0..<4 {
+        for i in 0..<3 {
             let rule = model.mnca.rules[i]
                         
             arraysMetaData[offset] = Int32(rule.shape.rawValue)
             arraysMetaData[offset + 1] = Int32(rule.mode.rawValue)
-            arraysMetaData[offset + 2] = Int32(rule.policy.rawValue)
             
             offset += 5
         }
@@ -154,7 +151,6 @@ class Renderer {
             rule1Buffer = createBuffer(array: &model.mnca.rules[0].ruleValues, count: ruleArrayCount)
             rule2Buffer = createBuffer(array: &model.mnca.rules[1].ruleValues, count: ruleArrayCount)
             rule3Buffer = createBuffer(array: &model.mnca.rules[2].ruleValues, count: ruleArrayCount)
-            rule4Buffer = createBuffer(array: &model.mnca.rules[3].ruleValues, count: ruleArrayCount)
             
             buffersUsed = createBuffer(array: &arraysUsed, count: 7)
             buffersMetaData = createBuffer(array: &arraysMetaData, count: 20)
@@ -174,10 +170,7 @@ class Renderer {
                 rule2Buffer!.contents().copyMemory(from: model.mnca.rules[1].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
             }
             if arraysUsed[5] == 1 {
-                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[2].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
-            }
-            if arraysUsed[6] == 1 {
-                rule2Buffer!.contents().copyMemory(from: model.mnca.rules[3].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
+                rule3Buffer!.contents().copyMemory(from: model.mnca.rules[2].ruleValues, byteCount: ruleArrayCount * MemoryLayout<Int32>.stride)
             }
             
             buffersUsed!.contents().copyMemory(from: arraysUsed, byteCount: arraysUsed.count * MemoryLayout<Int32>.stride)
@@ -248,12 +241,11 @@ class Renderer {
                 computeEncoder.setBuffer(rule1Buffer, offset: 0, index: 5)
                 computeEncoder.setBuffer(rule2Buffer, offset: 0, index: 6)
                 computeEncoder.setBuffer(rule3Buffer, offset: 0, index: 7)
-                computeEncoder.setBuffer(rule4Buffer, offset: 0, index: 8)
 
-                computeEncoder.setBuffer(buffersUsed, offset: 0, index: 9)
-                computeEncoder.setBuffer(buffersMetaData, offset: 0, index: 10)
+                computeEncoder.setBuffer(buffersUsed, offset: 0, index: 8)
+                computeEncoder.setBuffer(buffersMetaData, offset: 0, index: 9)
 
-                computeEncoder.setTexture(resultTexture, index: 11)
+                computeEncoder.setTexture(resultTexture, index: 10)
 
                 calculateThreadGroups(evalShapes, computeEncoder, texture.width, texture.height)
             }
