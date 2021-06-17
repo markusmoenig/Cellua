@@ -52,6 +52,11 @@ class Renderer {
     var arraysUsed      : [Int32]
     var buffersUsed     : MTLBuffer? = nil
     
+    // Palette
+    
+    var paletteArray    : [float4]
+    var paletteBuffer   : MTLBuffer? = nil
+    
     // RulesMetaData
     
     var arraysMetaData  : [Int32]
@@ -61,6 +66,9 @@ class Renderer {
         arraysUsed = Array<Int32>(repeating: 0, count: 6)
         // 5 Ints per rule * 4
         arraysMetaData = Array<Int32>(repeating: 0, count: 15)
+        
+        // Palette
+        paletteArray = Array<float4>(repeating: float4(0,0,0,0), count: 20)
     }
     
     deinit {
@@ -119,15 +127,12 @@ class Renderer {
         
         // Copy the rules to the meta data buffers, 5 Int32 per rule
         
-        // Offset 0: Shape Nr
         // Offset 1: Mode (Absolute / Average)
-        // Offset 2: Policy
         
         var offset = 0
         for i in 0..<3 {
             let rule = model.mnca.rules[i]
                         
-            arraysMetaData[offset] = Int32(rule.shape.rawValue)
             arraysMetaData[offset + 1] = Int32(rule.mode.rawValue)
             
             offset += 5
@@ -154,6 +159,15 @@ class Renderer {
             
             buffersUsed = createBuffer(array: &arraysUsed, count: 7)
             buffersMetaData = createBuffer(array: &arraysMetaData, count: 20)
+
+            // Create the palette
+            for (index, color) in model.mnca.colors.enumerated() {
+                paletteArray[index] = color.value
+            }
+            
+            paletteArray.withUnsafeMutableBytes { ptr in
+                paletteBuffer = view?.device!.makeBuffer(bytes: ptr.baseAddress!, length: 20 * MemoryLayout<float4>.stride, options: [])!
+            }
         } else {
             // Update only the buffers which are used
             
@@ -244,8 +258,9 @@ class Renderer {
 
                 computeEncoder.setBuffer(buffersUsed, offset: 0, index: 8)
                 computeEncoder.setBuffer(buffersMetaData, offset: 0, index: 9)
+                computeEncoder.setBuffer(paletteBuffer, offset: 0, index: 10)
 
-                computeEncoder.setTexture(resultTexture, index: 10)
+                computeEncoder.setTexture(resultTexture, index: 11)
 
                 calculateThreadGroups(evalShapes, computeEncoder, texture.width, texture.height)
             }
@@ -379,45 +394,4 @@ class Renderer {
 
         return computePipelineState
     }
-    
-    #if false
-    // Unused right now, initially I wanted to dynamically compile the shader.
-    func compile()
-    {
-        var code =
-        """
-                
-        #include <metal_stdlib>
-        using namespace metal;
-        
-        uint2 wrap(int2 gid, int2 size) {
-            return uint2((gid + size) % size);
-        }
-        
-        /// Resets the value texture by initializing it with some pseudo-random hash values
-        kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[texture(0)]],
-                               texture2d<half, access::write> valueTextureOut   [[texture(1)]],
-                               constant int *shapeA                             [[buffer(2)]],
-                               texture2d<half, access::write> resultTexture     [[texture(3)]],
-                               uint2 gid                                        [[thread_position_in_grid]])
-        {
-        }
-        """
-        
-        guard let model = model else {
-            return
-        }
-        
-        let compiledCB : MTLNewLibraryCompletionHandler = { (library, error) in
-            
-            if let error = error {
-                print(error)
-            }
-
-            self.computeStates[ComputeStates.EvalShapes.rawValue] = self.createComputeState(library: library, name: "evalShapes")
-        }
-        
-        view?.device?.makeLibrary(source: code, options: nil, completionHandler: compiledCB)
-    }
-    #endif
 }

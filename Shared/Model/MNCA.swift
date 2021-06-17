@@ -41,6 +41,14 @@ class MNCA : Codable, Equatable {
         colors.append(PaletteColor(.blue))
         colors.append(PaletteColor(.brown))
         colors.append(PaletteColor(.clear))
+        
+        colors.append(PaletteColor(.green))
+        colors.append(PaletteColor(.orange))
+        colors.append(PaletteColor(.pink))
+        colors.append(PaletteColor(.red))
+        colors.append(PaletteColor(.yellow))
+
+        /*
         colors.append(PaletteColor(.cyan))
         colors.append(PaletteColor(.gray))
         colors.append(PaletteColor(.green))
@@ -53,6 +61,7 @@ class MNCA : Codable, Equatable {
         colors.append(PaletteColor(.red))
         colors.append(PaletteColor(.teal))
         colors.append(PaletteColor(.yellow))
+        */
     }
     
     required init(from decoder: Decoder) throws

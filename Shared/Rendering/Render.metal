@@ -44,7 +44,8 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
                        constant int *rules3                             [[buffer(7)]],
                        constant int *buffersUsed                        [[buffer(8)]],
                        constant int *buffersMetaData                    [[buffer(9)]],
-                       texture2d<half, access::write> resultTexture     [[texture(10)]],
+                       constant float4 *palette                         [[buffer(10)]],
+                       texture2d<half, access::write> resultTexture     [[texture(11)]],
                        uint2 gid                                        [[thread_position_in_grid]])
 {
     int2 size = int2(valueTexture.get_width(), valueTexture.get_height());
@@ -83,7 +84,7 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
                 // Absolute
                 if (count == i) {
                     value = rules1[i];
-                    result = half4(1, 1, 1, 1);
+                    result = half4(palette[rules1[i+100]]);
                     break;
                 }
             }
@@ -99,7 +100,7 @@ kernel void evalShapes(texture2d<half, access::read>  valueTexture      [[textur
                     // Absolute
                     if (count == i) {
                         value = rules2[i];
-                        result = half4(1, 1, 1, 1);
+                        result = half4(palette[i+100]);
                         break;
                     }
                 }

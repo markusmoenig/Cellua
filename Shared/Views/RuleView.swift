@@ -31,7 +31,7 @@ struct RuleView: View {
         ZStack {
             
             MetalView()
-                .opacity(model.showPreview ? 1 : 0.5)
+                .opacity(model.showPreview ? 1 : 1)
         
             if model.showPreview == false {
                 VStack {
@@ -66,6 +66,125 @@ struct RuleView: View {
                                     })
                                     .padding(0)
                                 
+                                
+                                .contextMenu {
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 0
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("White")
+                                            .foregroundColor(.white)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 1
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Black")
+                                            .foregroundColor(.black)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 2
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Blue")
+                                            .foregroundColor(.blue)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 3
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Brown")
+                                            .foregroundColor(.brown)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 4
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Clear")
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 5
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Green")
+                                            .foregroundColor(.green)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 6
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Orange")
+                                            .foregroundColor(.orange)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 7
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Pink")
+                                            .foregroundColor(.pink)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 8
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Red")
+                                            .foregroundColor(.red)
+                                    }
+                                    
+                                    Button(action: {
+                                        rule?.ruleValues[index + 100] = 9
+                                        model.renderer.needsReset = true
+                                        currentIndex = index
+                                        currentIndex = nil
+                                    }) {
+                                        Text("Yellow")
+                                            .foregroundColor(.yellow)
+                                    }
+                                }
+                                
+                                /*
+                                colors.append(PaletteColor(.brown))
+                                colors.append(PaletteColor(.clear))
+                                colors.append(PaletteColor(.cyan))
+                                colors.append(PaletteColor(.gray))
+                                colors.append(PaletteColor(.green))
+                                colors.append(PaletteColor(.indigo))
+                                colors.append(PaletteColor(.mint))
+                                colors.append(PaletteColor(.orange))
+                                colors.append(PaletteColor(.pink))
+                                colors.append(PaletteColor(.purple))
+                                colors.append(PaletteColor(.red))
+                                colors.append(PaletteColor(.red))
+                                colors.append(PaletteColor(.teal))
+                                colors.append(PaletteColor(.yellow))*/
+                                
                                 if let rule = rule {
                                     Text(ruleDigits[Int(rule.ruleValues[index]) + 1] )
                                         .allowsHitTesting(false)
@@ -73,6 +192,8 @@ struct RuleView: View {
                                 
                                 if index == currentIndex {
                                 }
+                                
+            
                             }
                         }
                     }
@@ -106,25 +227,6 @@ struct RuleView: View {
             }
             
             ToolbarItemGroup(placement: .automatic) {
-                
-                Menu {
-                    //List {
-                    /*
-                    ForEach($model.mnca.colors, id: \.id) { color in
-                        Button(action: {
-
-                        }) {
-                            Rectangle()
-                                .fill(.blue)
-                                .frame(width: 30, height: 30)
-                        }
-                    }
-                    */
-                    //}}
-
-                } label: {
-                    Image(systemName: modeImage)
-                }
                 
                 Menu {
                     Button(action: {
@@ -178,6 +280,15 @@ struct RuleView: View {
     
     /// Returns the right color for the index
     func getColorForIndex(_ index: Int) -> Color {
+        
+        if let rule = rule {
+            
+            let colorIndex = rule.ruleValues[index + 100]
+            if colorIndex >= 0 && colorIndex != 4 {
+                return model.mnca.colors[Int(colorIndex)].color.opacity(0.7)
+            }
+        }
+        
         return .black.opacity(0.5)
     }
 }

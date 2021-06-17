@@ -9,10 +9,6 @@ import Foundation
 
 class Rule : Codable, Equatable, Hashable {
     
-    enum RuleShape : Int, Codable {
-        case ShapeA, ShapeB, ShapeC
-    }
-    
     enum RuleMode : Int, Codable {
         case Absolute, Average
     }
@@ -20,7 +16,6 @@ class Rule : Codable, Equatable, Hashable {
     var id              = UUID()
     var name            = ""
     
-    var shape           : RuleShape = .ShapeA
     var mode            : RuleMode = .Absolute
 
     /// Contains 100 rule values and their meta data
@@ -29,7 +24,6 @@ class Rule : Codable, Equatable, Hashable {
     private enum CodingKeys: String, CodingKey {
         case id
         case name
-        case shape
         case mode
         case ruleValues
     }
@@ -39,6 +33,10 @@ class Rule : Codable, Equatable, Hashable {
         self.name = name
         
         ruleValues = Array<Int32>(repeating: -1, count: 200)
+        
+        for i in 100..<200 {
+            ruleValues[i] = 4
+        }
     }
     
     required init(from decoder: Decoder) throws
@@ -46,7 +44,6 @@ class Rule : Codable, Equatable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
-        shape = try container.decode(RuleShape.self, forKey: .shape)
         mode = try container.decode(RuleMode.self, forKey: .mode)
         ruleValues = try container.decode([Int32].self, forKey: .ruleValues)
     }
@@ -56,7 +53,6 @@ class Rule : Codable, Equatable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
-        try container.encode(shape, forKey: .shape)
         try container.encode(mode, forKey: .mode)
         try container.encode(ruleValues, forKey: .ruleValues)
     }

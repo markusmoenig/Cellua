@@ -28,6 +28,7 @@ struct ShapeView: View {
             
             MetalView()
                 .opacity(model.showPreview ? 1 : 0.5)
+                .allowsHitTesting(false)
             
             if model.showPreview == false {
                 VStack {

@@ -25,13 +25,6 @@ struct ContentView: View {
         }
         #else
         AppSidebarNavigation()
-        
-        /*
-        .onAppear(perform: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.model.renderer.isStarted = true
-            }
-        })*/
         #endif
     }
 }

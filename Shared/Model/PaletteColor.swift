@@ -58,11 +58,18 @@ class PaletteColor : Codable, Equatable, Hashable {
     
     /// Sets the color value from an SwiftUI color, returns true if the value is actually different
     @discardableResult func fromColor(_ color: Color) -> float4 {
-        if let cgColor = color.cgColor {
-            let v = float4(Float(cgColor.components![0]), Float(cgColor.components![1]), Float(cgColor.components![2]), Float(cgColor.components![3]))
-            return v
-        }
+                
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
         
-        return float4(0,0,0,0)
+        #if os(macOS)
+        if let color = NSColor(color).usingColorSpace(.deviceRGB) {
+            color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        }
+        #elseif os(iOS)
+        let color = UIColor(color)
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        #endif
+        
+        return float4(Float(red), Float(green), Float(blue), Float(alpha))
     }
 }
