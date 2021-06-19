@@ -13,6 +13,14 @@ struct ShapeView: View {
     @State var currentIndex                 : Int? = nil
     
     @State var shape                        : Shape? = nil
+    
+    @State var showShapePopover             = false
+
+    @State var sizeValue                    : Double = 3
+    @State var sizeValueText                = "3"
+    
+    @State var ringValue                    : Double = 0
+    @State var ringValueText                = "0"
 
     init()
     {
@@ -27,49 +35,55 @@ struct ShapeView: View {
         ZStack {
             
             MetalView()
-                .opacity(model.showPreview ? 1 : 0.5)
+                .opacity(1)
                 .allowsHitTesting(false)
             
             if model.showPreview == false {
                 VStack {
                     
                     Spacer()
-
-                    LazyVGrid(columns: columns, spacing: 1) {
-                        ForEach(0..<17*17) { index in
-                            ZStack {
-                                Rectangle()
-                                    .fill(getColorForIndex(index))
-                                    .frame(width: 20, height: 20)
-                                    .onTapGesture(perform: {
+                    
+                    ZStack {
+                        
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.white).opacity(0.2)
+                            .frame(maxWidth: 18 * 20 + 16, maxHeight: 18 * 20 + 16)
                                         
-                                        if let shape = shape {
-                                            if shape.pixels17x17[index] == 1 {
-                                                shape.pixels17x17[index] = 0
-                                                model.renderer.needsReset = true
-                                                currentIndex = index
-                                            } else
-                                            if shape.pixels17x17[index] == 0 {
-                                                shape.pixels17x17[index] = 1
-                                                model.renderer.needsReset = true
-                                                currentIndex = index
+                        LazyVGrid(columns: columns, spacing: 1) {
+                            ForEach(0..<17*17) { index in
+                                ZStack {
+                                    Rectangle()
+                                        .fill(getColorForIndex(index))
+                                        .frame(width: 20, height: 20)
+                                        .onTapGesture(perform: {
+                                            
+                                            if let shape = shape {
+                                                if shape.pixels17x17[index] == 1 {
+                                                    shape.pixels17x17[index] = 0
+                                                    model.renderer.needsReset = true
+                                                    currentIndex = index
+                                                } else
+                                                if shape.pixels17x17[index] == 0 {
+                                                    shape.pixels17x17[index] = 1
+                                                    model.renderer.needsReset = true
+                                                    currentIndex = index
+                                                }
                                             }
-                                        }
-                                        
-                                        currentIndex = nil
+                                            
+                                            currentIndex = nil
 
-                                    })
-                                    .padding(0)
-                                
-                                
-                                if index == currentIndex {
+                                        })
+                                        .padding(0)
+                                    
+                                    
+                                    if index == currentIndex {
+                                    }
                                 }
                             }
                         }
+                        //.background(Color.gray)
+                        .frame(maxWidth: 17 * 20 + 16)
                     }
-                    .background(Color.gray)
-                    .frame(maxWidth: 17 * 20 + 16)
-                    
                     Spacer()
                 }
             }
@@ -99,6 +113,84 @@ struct ShapeView: View {
                     Image(systemName: shape === model.mnca.shapes[2] ? "3.square.fill" : "3.square")
                 }
             }
+            
+            ToolbarItemGroup(placement: .automatic) {
+                
+                Button(action: {
+                    fill(0)
+                }) {
+                    Image(systemName: "square")
+                }
+                
+                Button(action: {
+                    fill(1)
+                }) {
+                    Image(systemName: "square.fill")
+                }
+                
+                Button(action: {
+                    showShapePopover = true
+                }) {
+                    Image(systemName: "circle")
+                }
+            }
+        }
+        
+        // Edit Node name
+        .popover(isPresented: self.$showShapePopover,
+                 arrowEdge: .top
+        ) {
+            VStack(alignment: .leading) {
+                
+                Menu("Shape: Circle") {
+                    Button(action: {
+                    }) {
+                        Text("Circle")
+                    }
+                    
+                    Button(action: {
+                    }) {
+                        Text("Box")
+                    }
+                }
+                
+                Text("Size")
+                    .padding(.top, 10)
+
+                HStack {
+                    Slider(value: Binding<Double>(get: {sizeValue}, set: { v in
+                        sizeValue = v
+                        sizeValueText = String(Int(v))
+                    }), in: Double(1)...Double(8))//, step: Double(parameter.step))
+                    Text(sizeValueText)
+                        .frame(maxWidth: 40)
+                }
+                
+                Text("Ring")
+                    .padding(.top, 10)
+
+                HStack {
+                    Slider(value: Binding<Double>(get: {ringValue}, set: { v in
+                        ringValue = v
+                        ringValueText = String(Int(v))
+                    }), in: Double(1)...Double(8))//, step: Double(parameter.step))
+                    Text(ringValueText)
+                        .frame(maxWidth: 40)
+                }
+                
+                HStack {
+                    Button("Add", action: {
+                        addCircle(Int(sizeValue), ring: Int(ringValue))
+                    })
+                    Button("Subtract", action: {
+                        addCircle(Int(sizeValue), ring: Int(ringValue), subtract: true)
+                    })
+                }
+                .padding(.top, 10)
+
+            }
+            .frame(minWidth: 250)
+            .padding()
         }
 
         
@@ -115,14 +207,65 @@ struct ShapeView: View {
         
         if let shape = shape {
             if shape.pixels17x17[index] == -1 {
-                return .red
+                return .red.opacity(0.6)
             } else
             if shape.pixels17x17[index] == 1 {
-                return .white
+                return .white.opacity(0.6)
             }
         }
         
-        return .black
+        return .black.opacity(0.6)
+    }
+    
+    /// Adds a circle to the shape
+    func addCircle(_ size: Int, ring: Int, subtract: Bool = false)
+    {
+        currentIndex = 2
+
+        for j in 0..<17 {
+            for i in 0..<17 {
+                
+                if j == 8 && i == 8 {
+                    continue
+                }
+                
+                let uv = float2(Float(i), Float(j)) - float2(8,8)
+                
+                let d = round(length(uv) - Float(size + 1))
+                
+                if ring == 0 {
+                    if d < 0.0 {
+                        shape!.pixels17x17[j * 17 + i] = subtract ? 0 : 1
+                    }
+                } else {
+                    //d = abs(d) - Float(ringValue)
+                    if d < 0.0 && d > -Float(ringValue) {
+                        shape!.pixels17x17[j * 17 + i] = subtract ? 0 : 1
+                    }
+                }
+            }
+        }
+        
+        currentIndex = nil
+    }
+    
+    ///  Fills the shape
+    func fill(_ value: Int32)
+    {
+        currentIndex = 2
+
+        for j in 0..<17 {
+            for i in 0..<17 {
+                
+                if j == 8 && i == 8 {
+                    continue
+                }
+                
+                shape!.pixels17x17[j * 17 + i] = value
+            }
+        }
+        
+        currentIndex = nil
     }
 }
 

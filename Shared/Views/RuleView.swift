@@ -31,173 +31,181 @@ struct RuleView: View {
         ZStack {
             
             MetalView()
-                .opacity(model.showPreview ? 1 : 1)
+                .opacity(1)
+                .allowsHitTesting(false)
         
             if model.showPreview == false {
                 VStack {
 
                     Spacer()
+                    
+                    ZStack {
+                        
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.white).opacity(0.2)
+                            .frame(maxWidth: 11 * 30 + 9, maxHeight: 11 * 30 + 9)
 
-                    LazyVGrid(columns: columns, spacing: 1) {
-                        ForEach(0..<100) { index in
-                            ZStack {
-                                Rectangle()
-                                    .fill(getColorForIndex(index))
-                                    .frame(width: 30, height: 30)
-                                    .onTapGesture(perform: {
-                                        if let rule = rule {
-                                            if rule.ruleValues[index] == -1 {
-                                                rule.ruleValues[index] = 0
-                                                model.renderer.needsReset = true
-                                                currentIndex = index
-                                            } else
-                                            if rule.ruleValues[index] == 0 {
-                                                rule.ruleValues[index] = 1
-                                                model.renderer.needsReset = true
-                                                currentIndex = index
-                                            } else
-                                            if rule.ruleValues[index] == 1 {
-                                                rule.ruleValues[index] = -1
-                                                model.renderer.needsReset = true
-                                                currentIndex = index
+                        LazyVGrid(columns: columns, spacing: 1) {
+                            ForEach(0..<100) { index in
+                                ZStack {
+                                    Rectangle()
+                                        .fill(getColorForIndex(index))
+                                        .frame(width: 30, height: 30)
+                                        .onTapGesture(perform: {
+                                            if let rule = rule {
+                                                if rule.ruleValues[index] == -1 {
+                                                    rule.ruleValues[index] = 0
+                                                    model.renderer.needsReset = true
+                                                    currentIndex = index
+                                                } else
+                                                if rule.ruleValues[index] == 0 {
+                                                    rule.ruleValues[index] = 1
+                                                    model.renderer.needsReset = true
+                                                    currentIndex = index
+                                                } else
+                                                if rule.ruleValues[index] == 1 {
+                                                    rule.ruleValues[index] = -1
+                                                    model.renderer.needsReset = true
+                                                    currentIndex = index
+                                                }
                                             }
+                                            currentIndex = nil
+                                        })
+                                        .padding(0)
+                                    
+                                    
+                                    .contextMenu {
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 0
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("White")
+                                                .foregroundColor(.white)
                                         }
-                                        currentIndex = nil
-                                    })
-                                    .padding(0)
-                                
-                                
-                                .contextMenu {
-                                    
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 0
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("White")
-                                            .foregroundColor(.white)
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 1
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Black")
+                                                .foregroundColor(.black)
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 2
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Blue")
+                                                .foregroundColor(.blue)
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 3
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Brown")
+                                                .foregroundColor(.brown)
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 4
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Clear")
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 5
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Green")
+                                                .foregroundColor(.green)
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 6
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Orange")
+                                                .foregroundColor(.orange)
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 7
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Pink")
+                                                .foregroundColor(.pink)
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 8
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Red")
+                                                .foregroundColor(.red)
+                                        }
+                                        
+                                        Button(action: {
+                                            rule?.ruleValues[index + 100] = 9
+                                            model.renderer.needsReset = true
+                                            currentIndex = index
+                                            currentIndex = nil
+                                        }) {
+                                            Text("Yellow")
+                                                .foregroundColor(.yellow)
+                                        }
                                     }
                                     
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 1
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Black")
-                                            .foregroundColor(.black)
+                                    /*
+                                    colors.append(PaletteColor(.brown))
+                                    colors.append(PaletteColor(.clear))
+                                    colors.append(PaletteColor(.cyan))
+                                    colors.append(PaletteColor(.gray))
+                                    colors.append(PaletteColor(.green))
+                                    colors.append(PaletteColor(.indigo))
+                                    colors.append(PaletteColor(.mint))
+                                    colors.append(PaletteColor(.orange))
+                                    colors.append(PaletteColor(.pink))
+                                    colors.append(PaletteColor(.purple))
+                                    colors.append(PaletteColor(.red))
+                                    colors.append(PaletteColor(.red))
+                                    colors.append(PaletteColor(.teal))
+                                    colors.append(PaletteColor(.yellow))*/
+                                    
+                                    if let rule = rule {
+                                        Text(ruleDigits[Int(rule.ruleValues[index]) + 1] )
+                                            .allowsHitTesting(false)
                                     }
                                     
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 2
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Blue")
-                                            .foregroundColor(.blue)
+                                    if index == currentIndex {
                                     }
                                     
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 3
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Brown")
-                                            .foregroundColor(.brown)
-                                    }
-                                    
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 4
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Clear")
-                                    }
-                                    
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 5
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Green")
-                                            .foregroundColor(.green)
-                                    }
-                                    
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 6
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Orange")
-                                            .foregroundColor(.orange)
-                                    }
-                                    
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 7
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Pink")
-                                            .foregroundColor(.pink)
-                                    }
-                                    
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 8
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Red")
-                                            .foregroundColor(.red)
-                                    }
-                                    
-                                    Button(action: {
-                                        rule?.ruleValues[index + 100] = 9
-                                        model.renderer.needsReset = true
-                                        currentIndex = index
-                                        currentIndex = nil
-                                    }) {
-                                        Text("Yellow")
-                                            .foregroundColor(.yellow)
-                                    }
+                
                                 }
-                                
-                                /*
-                                colors.append(PaletteColor(.brown))
-                                colors.append(PaletteColor(.clear))
-                                colors.append(PaletteColor(.cyan))
-                                colors.append(PaletteColor(.gray))
-                                colors.append(PaletteColor(.green))
-                                colors.append(PaletteColor(.indigo))
-                                colors.append(PaletteColor(.mint))
-                                colors.append(PaletteColor(.orange))
-                                colors.append(PaletteColor(.pink))
-                                colors.append(PaletteColor(.purple))
-                                colors.append(PaletteColor(.red))
-                                colors.append(PaletteColor(.red))
-                                colors.append(PaletteColor(.teal))
-                                colors.append(PaletteColor(.yellow))*/
-                                
-                                if let rule = rule {
-                                    Text(ruleDigits[Int(rule.ruleValues[index]) + 1] )
-                                        .allowsHitTesting(false)
-                                }
-                                
-                                if index == currentIndex {
-                                }
-                                
-            
                             }
                         }
+                        .frame(maxWidth: 10 * 30 + 9)
                     }
-                    .frame(maxWidth: 10 * 30 + 9)
                     
                     Spacer()
                 }
