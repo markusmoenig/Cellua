@@ -30,7 +30,20 @@ struct PersistenceController {
             if let error = error {
                 fatalError("Error: \(error.localizedDescription)")
             }
-        }        
+        }
+        
+        /*
+        let request = CelluaEntity.fetchRequest()
+        let objects = try! container.viewContext.fetch(request)
+
+        objects.forEach { ca in
+            
+            guard let name = ca.name else {
+                return
+            }
+
+            print(name)
+        }*/
     }
     
     /// Save the context if it has changes
