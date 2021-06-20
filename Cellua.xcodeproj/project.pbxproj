@@ -17,6 +17,10 @@
 		2B853D96267707A000969356 /* Rule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B853D94267707A000969356 /* Rule.swift */; };
 		2B853D9C26770BD700969356 /* RuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B853D9B26770BD700969356 /* RuleView.swift */; };
 		2B853D9D26770BD700969356 /* RuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B853D9B26770BD700969356 /* RuleView.swift */; };
+		2B856E0B267F26120002D955 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2B856E09267F26120002D955 /* DataModel.xcdatamodeld */; };
+		2B856E0C267F26120002D955 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2B856E09267F26120002D955 /* DataModel.xcdatamodeld */; };
+		2B856E0E267F27090002D955 /* PersistanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B856E0D267F27090002D955 /* PersistanceController.swift */; };
+		2B856E0F267F27090002D955 /* PersistanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B856E0D267F27090002D955 /* PersistanceController.swift */; };
 		2B86AFAF2675A8E10071FC19 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B86AFAE2675A8E10071FC19 /* Shape.swift */; };
 		2B86AFB02675A8E10071FC19 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B86AFAE2675A8E10071FC19 /* Shape.swift */; };
 		2B86AFB22675A9F50071FC19 /* MNCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B86AFB12675A9F50071FC19 /* MNCA.swift */; };
@@ -71,6 +75,8 @@
 		2B67D4702679E65D0080AFCD /* PaletteColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteColor.swift; sourceTree = "<group>"; };
 		2B853D94267707A000969356 /* Rule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rule.swift; sourceTree = "<group>"; };
 		2B853D9B26770BD700969356 /* RuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleView.swift; sourceTree = "<group>"; };
+		2B856E0A267F26120002D955 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		2B856E0D267F27090002D955 /* PersistanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceController.swift; sourceTree = "<group>"; };
 		2B86AFAE2675A8E10071FC19 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		2B86AFB12675A9F50071FC19 /* MNCA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNCA.swift; sourceTree = "<group>"; };
 		2B86AFB82675AD6D0071FC19 /* ShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeView.swift; sourceTree = "<group>"; };
@@ -134,6 +140,7 @@
 				2B67D4702679E65D0080AFCD /* PaletteColor.swift */,
 				2B86AFB12675A9F50071FC19 /* MNCA.swift */,
 				2B0710CE2672ED020021DD82 /* Model.swift */,
+				2B856E0D267F27090002D955 /* PersistanceController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -191,6 +198,7 @@
 				2B0710CD2672ECED0021DD82 /* Model */,
 				2BD3AA1A26743EF0002E70AF /* Rendering */,
 				2BF305C12672E5AC00BB9982 /* Assets.xcassets */,
+				2B856E09267F26120002D955 /* DataModel.xcdatamodeld */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -394,6 +402,8 @@
 				2B67D4712679E65D0080AFCD /* PaletteColor.swift in Sources */,
 				2BD3AA2926744796002E70AF /* Utilities.swift in Sources */,
 				2BF305E12672E5AC00BB9982 /* CelluaApp.swift in Sources */,
+				2B856E0B267F26120002D955 /* DataModel.xcdatamodeld in Sources */,
+				2B856E0E267F27090002D955 /* PersistanceController.swift in Sources */,
 				2BC900C126783F5300B6E05A /* AppTabNavigation.swift in Sources */,
 				2B853D95267707A000969356 /* Rule.swift in Sources */,
 				2BF40B432674651F0090A139 /* Renderer.swift in Sources */,
@@ -405,6 +415,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B856E0F267F27090002D955 /* PersistanceController.swift in Sources */,
 				2B853D9D26770BD700969356 /* RuleView.swift in Sources */,
 				2B86AFBA2675AD6D0071FC19 /* ShapeView.swift in Sources */,
 				2B0710D42672EDA10021DD82 /* AppSidebarNavigation.swift in Sources */,
@@ -420,6 +431,7 @@
 				2BF305E22672E5AC00BB9982 /* CelluaApp.swift in Sources */,
 				2B853D96267707A000969356 /* Rule.swift in Sources */,
 				2BF40B442674651F0090A139 /* Renderer.swift in Sources */,
+				2B856E0C267F26120002D955 /* DataModel.xcdatamodeld in Sources */,
 				2B67D4722679E65D0080AFCD /* PaletteColor.swift in Sources */,
 				2BD3AA2026743F6B002E70AF /* MathLibrary.swift in Sources */,
 			);
@@ -841,6 +853,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2B856E09267F26120002D955 /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2B856E0A267F26120002D955 /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 2B856E0A267F26120002D955 /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 2BF305BA2672E5AA00BB9982 /* Project object */;
 }
