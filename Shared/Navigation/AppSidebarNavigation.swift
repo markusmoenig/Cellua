@@ -12,14 +12,12 @@ struct AppSidebarNavigation: View {
     enum NavigationItem {
         case shapes
         case rules
+        case library
         case preview
-        case settings
     }
 
     @EnvironmentObject private var model: Model
     @State private var selection: NavigationItem? = .shapes
-
-    @Environment(\.managedObjectContext) var managedObjectContext
 
     var body: some View {
         NavigationView {
@@ -39,9 +37,9 @@ struct AppSidebarNavigation: View {
                 }
                 
                 NavigationLink(tag: NavigationItem.preview, selection: $selection) {
-                    MetalView()
+                    LibraryView()
                 } label: {
-                    Label("Preview", systemImage: "list.bullet")
+                    Label("Library", systemImage: "house")
                 }
             }
         }

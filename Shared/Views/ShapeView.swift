@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ShapeView: View {
         
+    @Environment(\.managedObjectContext) var managedObjectContext
+
     @EnvironmentObject private var model    : Model
     @State var currentIndex                 : Int? = nil
     
@@ -132,6 +134,35 @@ struct ShapeView: View {
                     showShapePopover = true
                 }) {
                     Image(systemName: "circle")
+                }
+            }
+            
+            ToolbarItemGroup(placement: .automatic) {
+                
+                Button(action: {
+                    
+                    
+                    let object = CelluaEntity(context: managedObjectContext)
+                    
+                    object.name = "Yo"
+                    
+                    try! managedObjectContext.save()
+                    
+                    let request = CelluaEntity.fetchRequest()
+                    let objects = try! managedObjectContext.fetch(request)
+
+                    print("here")
+                    objects.forEach { ca in
+                        
+                        guard let name = ca.name else {
+                            return
+                        }
+
+                        print("testing", name)
+                    }
+                    
+                }) {
+                    Image(systemName: "square")
                 }
             }
         }

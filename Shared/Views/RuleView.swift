@@ -60,6 +60,9 @@ struct RuleView: View {
                                                 } else
                                                 if rule.ruleValues[index] == 0 {
                                                     rule.ruleValues[index] = 1
+                                                    if rule.ruleValues[index + 100] == 4 {
+                                                        rule.ruleValues[index + 100] = 0
+                                                    }
                                                     model.renderer.needsReset = true
                                                     currentIndex = index
                                                 } else

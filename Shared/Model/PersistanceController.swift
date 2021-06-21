@@ -12,15 +12,11 @@ struct PersistenceController {
     // A singleton for our entire app to use
     static let shared = PersistenceController()
 
-    // Storage for Core Data
     let container: NSPersistentContainer
 
-    // An initializer to load Core Data, optionally able
-    // to use an in-memory store.
     init(inMemory: Bool = false) {
-        // If you didn't name your model Main you'll need
-        // to change this name below.
-        container = NSPersistentContainer(name: "DataModel")
+
+        container = NSPersistentCloudKitContainer(name: "DataModel")
 
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
@@ -31,19 +27,6 @@ struct PersistenceController {
                 fatalError("Error: \(error.localizedDescription)")
             }
         }
-        
-        /*
-        let request = CelluaEntity.fetchRequest()
-        let objects = try! container.viewContext.fetch(request)
-
-        objects.forEach { ca in
-            
-            guard let name = ca.name else {
-                return
-            }
-
-            print(name)
-        }*/
     }
     
     /// Save the context if it has changes

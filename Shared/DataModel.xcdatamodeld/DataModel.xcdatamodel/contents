@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19141.11" systemVersion="21A5248p" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19141.11" systemVersion="21A5248p" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="CelluaEntity" representedClassName="CelluaEntity" syncable="YES" codeGenerationType="class">
         <attribute name="about" optional="YES" attributeType="String"/>
         <attribute name="creator" optional="YES" attributeType="String"/>

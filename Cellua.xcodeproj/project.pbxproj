@@ -28,6 +28,9 @@
 		2B86AFB92675AD6D0071FC19 /* ShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B86AFB82675AD6D0071FC19 /* ShapeView.swift */; };
 		2B86AFBA2675AD6D0071FC19 /* ShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B86AFB82675AD6D0071FC19 /* ShapeView.swift */; };
 		2BC900C126783F5300B6E05A /* AppTabNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC900C026783F5300B6E05A /* AppTabNavigation.swift */; };
+		2BCE50302680177B005EAB67 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BCE502F2680177B005EAB67 /* CloudKit.framework */; };
+		2BCE503226802C89005EAB67 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCE503126802C89005EAB67 /* LibraryView.swift */; };
+		2BCE503326802C89005EAB67 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCE503126802C89005EAB67 /* LibraryView.swift */; };
 		2BD3AA1C26743F1C002E70AF /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA1B26743F1C002E70AF /* MetalView.swift */; };
 		2BD3AA1D26743F1C002E70AF /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA1B26743F1C002E70AF /* MetalView.swift */; };
 		2BD3AA1F26743F6B002E70AF /* MathLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD3AA1E26743F6B002E70AF /* MathLibrary.swift */; };
@@ -81,6 +84,9 @@
 		2B86AFB12675A9F50071FC19 /* MNCA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNCA.swift; sourceTree = "<group>"; };
 		2B86AFB82675AD6D0071FC19 /* ShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeView.swift; sourceTree = "<group>"; };
 		2BC900C026783F5300B6E05A /* AppTabNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabNavigation.swift; sourceTree = "<group>"; };
+		2BCE502D26801771005EAB67 /* Cellua.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cellua.entitlements; sourceTree = "<group>"; };
+		2BCE502F2680177B005EAB67 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		2BCE503126802C89005EAB67 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		2BD3AA1B26743F1C002E70AF /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		2BD3AA1E26743F6B002E70AF /* MathLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathLibrary.swift; sourceTree = "<group>"; };
 		2BD3AA2126744527002E70AF /* MetalDrawables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalDrawables.swift; sourceTree = "<group>"; };
@@ -112,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BCE50302680177B005EAB67 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,10 +165,19 @@
 		2B853D9726770BAC00969356 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2B853D9B26770BD700969356 /* RuleView.swift */,
 				2B86AFB82675AD6D0071FC19 /* ShapeView.swift */,
+				2B853D9B26770BD700969356 /* RuleView.swift */,
+				2BCE503126802C89005EAB67 /* LibraryView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		2BCE502E2680177B005EAB67 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2BCE502F2680177B005EAB67 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		2BD3AA1A26743EF0002E70AF /* Rendering */ = {
@@ -182,10 +198,12 @@
 		2BF305B92672E5AA00BB9982 = {
 			isa = PBXGroup;
 			children = (
+				2BCE502D26801771005EAB67 /* Cellua.entitlements */,
 				2BF305BE2672E5AB00BB9982 /* Shared */,
 				2BF305D42672E5AC00BB9982 /* Tests iOS */,
 				2BF305DE2672E5AC00BB9982 /* Tests macOS */,
 				2BF305C72672E5AC00BB9982 /* Products */,
+				2BCE502E2680177B005EAB67 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -395,6 +413,7 @@
 				2B86AFB22675A9F50071FC19 /* MNCA.swift in Sources */,
 				2BF40B4626746D4E0090A139 /* Render.metal in Sources */,
 				2B0710CF2672ED020021DD82 /* Model.swift in Sources */,
+				2BCE503226802C89005EAB67 /* LibraryView.swift in Sources */,
 				2BD3AA1C26743F1C002E70AF /* MetalView.swift in Sources */,
 				2BF305E32672E5AC00BB9982 /* ContentView.swift in Sources */,
 				2BD3AA25267446F3002E70AF /* Drawables.metal in Sources */,
@@ -423,6 +442,7 @@
 				2B86AFB32675A9F50071FC19 /* MNCA.swift in Sources */,
 				2BF40B4726746D4E0090A139 /* Render.metal in Sources */,
 				2B0710D02672ED020021DD82 /* Model.swift in Sources */,
+				2BCE503326802C89005EAB67 /* LibraryView.swift in Sources */,
 				2BD3AA1D26743F1C002E70AF /* MetalView.swift in Sources */,
 				2BF305E42672E5AC00BB9982 /* ContentView.swift in Sources */,
 				2BD3AA26267446F3002E70AF /* Drawables.metal in Sources */,
@@ -648,6 +668,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cellua.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -664,7 +685,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.moenig.Cellua;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moenig.cellua;
 				PRODUCT_NAME = Cellua;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -678,6 +699,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cellua.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -694,7 +716,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.moenig.Cellua;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moenig.cellua;
 				PRODUCT_NAME = Cellua;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
