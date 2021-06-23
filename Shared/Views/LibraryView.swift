@@ -20,15 +20,28 @@ struct LibraryView: View {
     
     var body: some View {
         
-        List {
-            ForEach(objects, id: \.name) { object in
-                object.name.map(Text.init)
-                    .onTapGesture {
-                        self.managedObjectContext.delete(object)
-                        try! managedObjectContext.save()
-                    }
+        VStack {
+         
+            MetalView()
+            
+            List {
+                ForEach(objects, id: \.self) { object in
+                    object.name.map(Text.init)
+                        /*.onTapGesture {
+
+                        }*/
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                self.managedObjectContext.delete(object)
+                                try! managedObjectContext.save()
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                            .tint(.red)
+                        }
+                }
+                //.onDelete(perform: deleteObject)
             }
-            //.onDelete(perform: deleteObject)
         }
         .navigationTitle("Library")
     }

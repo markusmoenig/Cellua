@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import CloudKit
 
 struct PersistenceController {
     // A singleton for our entire app to use
@@ -18,6 +19,15 @@ struct PersistenceController {
 
         container = NSPersistentCloudKitContainer(name: "DataModel")
 
+        guard let description = container.persistentStoreDescriptions.first else {
+            fatalError("Error")
+        }
+        
+        description.cloudKitContainerOptions?.databaseScope = .public
+        
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
