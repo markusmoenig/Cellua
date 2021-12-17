@@ -248,6 +248,7 @@ class Renderer {
                     computeEncoder.setTexture( valueTexture, index: 1 )
                 }
                     
+                /*
                 computeEncoder.setBuffer(shapeABuffer, offset: 0, index: 2)
                 computeEncoder.setBuffer(shapeBBuffer, offset: 0, index: 3)
                 computeEncoder.setBuffer(shapeCBuffer, offset: 0, index: 4)
@@ -258,9 +259,10 @@ class Renderer {
 
                 computeEncoder.setBuffer(buffersUsed, offset: 0, index: 8)
                 computeEncoder.setBuffer(buffersMetaData, offset: 0, index: 9)
-                computeEncoder.setBuffer(paletteBuffer, offset: 0, index: 10)
-
-                computeEncoder.setTexture(resultTexture, index: 11)
+                 
+                 */
+                computeEncoder.setBuffer(paletteBuffer, offset: 0, index: 2)
+                computeEncoder.setTexture(resultTexture, index: 3)
 
                 calculateThreadGroups(evalShapes, computeEncoder, texture.width, texture.height)
             }

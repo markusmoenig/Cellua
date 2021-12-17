@@ -286,7 +286,7 @@ struct RuleView: View {
         })
 
         .navigationTitle(rule != nil ? rule!.name : "")
-        .animation(.linear)//, value: 1)
+        //.animation(.linear)//, value: 1)
     }
     
     /// Returns the right color for the index

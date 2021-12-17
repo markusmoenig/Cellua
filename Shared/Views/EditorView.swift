@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ShapeView: View {
+struct EditorView: View {
         
     @Environment(\.managedObjectContext) var managedObjectContext
 
@@ -230,7 +230,7 @@ struct ShapeView: View {
 #endif
         
         .navigationTitle(shape != nil ? shape!.name: "")
-        .animation(.linear)//, value: 1)
+        //.animation(.linear)//, value: 1)
     }
 
     /// Returns the appropriate color for the given shape index, right now only black / white if 0 / 1

@@ -23,7 +23,7 @@ struct AppSidebarNavigation: View {
         NavigationView {
             List {
                 NavigationLink(tag: NavigationItem.shapes, selection: $selection) {
-                    ShapeView()
+                    EditorView()
                     
                     //let entity = CelluaEntity(context: managedObjectContext)
                 } label: {
@@ -45,6 +45,6 @@ struct AppSidebarNavigation: View {
         }
         
         .navigationTitle("Cellua")        
-        .animation(.default)//, value: 1)
+        //.animation(.default)//, value: 1)
     }
 }
