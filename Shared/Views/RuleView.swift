@@ -29,7 +29,7 @@ struct RuleView: View {
         ]
         
         ZStack {
-            
+        /*
             MetalView()
                 .opacity(1)
                 .allowsHitTesting(false)
@@ -212,7 +212,7 @@ struct RuleView: View {
                     
                     Spacer()
                 }
-            }
+            }*/
         }
 
         .toolbar {
@@ -238,7 +238,7 @@ struct RuleView: View {
             }
             
             ToolbarItemGroup(placement: .automatic) {
-                
+                /*
                 Menu {
                     Button(action: {
                         if let rule = rule {
@@ -269,7 +269,7 @@ struct RuleView: View {
                     model.showPreview.toggle()
                 }) {
                     Image(systemName: model.showPreview ? "eye" : "eye.slash")
-                }
+                }*/
             }
         }
         

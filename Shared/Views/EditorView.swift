@@ -29,13 +29,16 @@ struct EditorView: View {
     }
     
     var body: some View {
-                    
-        let columns = [
-            GridItem(.adaptive(minimum: 20), spacing: 1)
-        ]
+     
+        //let columns = [
+        //    GridItem(.adaptive(minimum: 20), spacing: 1)
+        //]
         
         ZStack {
             
+            CelluaView()
+                .opacity(1)
+        /*
             MetalView()
                 .opacity(1)
                 .allowsHitTesting(false)
@@ -89,6 +92,7 @@ struct EditorView: View {
                     Spacer()
                 }
             }
+         */
         }
         
         .onAppear(perform: {

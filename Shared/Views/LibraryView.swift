@@ -22,7 +22,7 @@ struct LibraryView: View {
         
         VStack {
          
-            MetalView()
+            CelluaView()
             
             List {
                 ForEach(objects, id: \.self) { object in

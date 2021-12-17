@@ -8,11 +8,6 @@
 import Foundation
 
 class Model: NSObject, ObservableObject {
-
-    var ctkView     : CTKView!
-    var renderer    = Renderer()
-    
-    @Published var showPreview = false
     
     var mnca        : MNCA
     
@@ -21,13 +16,5 @@ class Model: NSObject, ObservableObject {
         mnca = MNCA()
 
         super.init()        
-    }
-    
-    /// MetalView will pass its embedded CTKView here
-    func setView(_ view: CTKView)
-    {
-        ctkView = view
-        ctkView.platformInit(renderer)
-        renderer.setView(self, ctkView)
     }
 }

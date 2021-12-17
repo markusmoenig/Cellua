@@ -26,7 +26,7 @@ public class CTKView        : MTKView
     var commandIsDown       : Bool = false
     var shiftIsDown         : Bool = false
     
-    var renderer            : Renderer? = nil
+    var renderer            = Renderer()
     var drawables           : MetalDrawables? = nil
     
     var color               : Float = 1
@@ -43,11 +43,11 @@ public class CTKView        : MTKView
     
     func update()
     {
-        renderer?.render()
+        renderer.render()
 
         if drawables?.encodeStart(float4(0,0,0,0)) != nil {
             
-            if let texture = renderer?.resultTexture {
+            if let texture = renderer.resultTexture {
                 drawables?.drawBox(position: float2(0,0), size: float2(Float(texture.width), Float(texture.height)), rounding: 0, borderSize: 0, onion: 0, fillColor: float4(0,0,0,1), borderColor: float4(0,0,0,0), texture: texture)
             }
             
@@ -56,24 +56,68 @@ public class CTKView        : MTKView
     }
     
     /// Setup the view
-    func platformInit(_ renderer: Renderer)
+    func platformInit(_ model: Model)
     {
-        self.renderer = renderer
         drawables = MetalDrawables(self)
+        
         #if os(OSX)
         layer?.isOpaque = false
         #endif
+        
+        renderer.setView(model, self)
     }
     
     #if os(OSX)
 
     override public var acceptsFirstResponder: Bool { return true }
 
+    func setMousePos(_ event: NSEvent)
+    {
+        var location = event.locationInWindow
+        location.y = location.y - CGFloat(frame.height)
+        location = convert(location, from: nil)
+        
+        mousePos.x = Float(location.x)
+        mousePos.y = -Float(location.y)
+    }
+    
+    override public func keyDown(with event: NSEvent)
+    {
+        keysDown.append(Float(event.keyCode))
+    }
+    
+    override public func keyUp(with event: NSEvent)
+    {
+        keysDown.removeAll{$0 == Float(event.keyCode)}
+    }
+        
+    override public func mouseDown(with event: NSEvent) {
+        setMousePos(event)
+        //core.nodesWidget.touchDown(mousePos)
+    }
+    
+    override public func mouseDragged(with event: NSEvent) {
+        setMousePos(event)
+        //core.nodesWidget.touchMoved(mousePos)
+    }
+    
+    override public func mouseUp(with event: NSEvent) {
+        mouseIsDown = false
+        hasTap = false
+        hasDoubleTap = false
+        setMousePos(event)
+        //core.nodesWidget.touchUp(mousePos)
+    }
+    
+    override public func scrollWheel(with event: NSEvent) {
+        //core.nodesWidget.scrollWheel(float3(Float(event.deltaX), Float(event.deltaY), Float(event.deltaZ)))
+    }
+
     #endif
 }
 
 #if os(OSX)
-struct MetalView: NSViewRepresentable {
+struct CelluaView: NSViewRepresentable {
     
     var trackingArea        : NSTrackingArea?
 
@@ -87,7 +131,7 @@ struct MetalView: NSViewRepresentable {
         Coordinator(self)
     }
     
-    func makeNSView(context: NSViewRepresentableContext<MetalView>) -> MTKView {
+    func makeNSView(context: NSViewRepresentableContext<CelluaView>) -> MTKView {
         let ctkView = CTKView(frame: NSMakeRect(0, 0, 100, 100))
         
         ctkView.delegate = context.coordinator
@@ -101,23 +145,23 @@ struct MetalView: NSViewRepresentable {
         ctkView.drawableSize = ctkView.frame.size
         ctkView.isPaused = false
         
-        model.setView(ctkView)
-
+        ctkView.platformInit(model)
+        
         return ctkView
     }
     
-    func updateNSView(_ view: MTKView, context: NSViewRepresentableContext<MetalView>) {
+    func updateNSView(_ view: MTKView, context: NSViewRepresentableContext<CelluaView>) {
         if let ctkView = view as? CTKView {
             ctkView.update()
         }
     }
     
     class Coordinator : NSObject, MTKViewDelegate {
-        var parent: MetalView
-        var metalDevice: MTLDevice!
-        var metalCommandQueue: MTLCommandQueue!
+        var parent              : CelluaView
+        var metalDevice         : MTLDevice!
+        var metalCommandQueue   : MTLCommandQueue!
         
-        init(_ parent: MetalView) {
+        init(_ parent: CelluaView) {
             self.parent = parent
             if let metalDevice = MTLCreateSystemDefaultDevice() {
                 self.metalDevice = metalDevice
@@ -140,7 +184,7 @@ struct MetalView: NSViewRepresentable {
     }
 }
 #else
-struct MetalView: UIViewRepresentable {
+struct CelluaView: UIViewRepresentable {
     typealias UIViewType = MTKView
 
     @EnvironmentObject private var model: Model
