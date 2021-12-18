@@ -10,24 +10,24 @@ import SwiftUI
 struct AppSidebarNavigation: View {
 
     enum NavigationItem {
-        case shapes
+        case editor
         case rules
         case library
         case preview
     }
 
     @EnvironmentObject private var model: Model
-    @State private var selection: NavigationItem? = .shapes
+    @State private var selection: NavigationItem? = .editor
 
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(tag: NavigationItem.shapes, selection: $selection) {
+                NavigationLink(tag: NavigationItem.editor, selection: $selection) {
                     EditorView()
                     
                     //let entity = CelluaEntity(context: managedObjectContext)
                 } label: {
-                    Label("Shapes", systemImage: "square")
+                    Label("Editor", systemImage: "square")
                 }
                 
                 NavigationLink(tag: NavigationItem.rules, selection: $selection) {

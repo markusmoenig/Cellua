@@ -24,6 +24,8 @@ struct EditorView: View {
     @State var ringValue                    : Double = 0
     @State var ringValueText                = "0"
 
+    @State var ctkView                      : CTKView? = nil
+    
     init()
     {
     }
@@ -34,10 +36,19 @@ struct EditorView: View {
         //    GridItem(.adaptive(minimum: 20), spacing: 1)
         //]
         
-        ZStack {
+        ZStack(alignment: .bottomLeading) {
             
-            CelluaView()
-                .opacity(1)
+            CelluaView(view: $ctkView)
+                //.opacity(1)
+            
+            Button(action: {
+                if let view = ctkView {
+                    view.renderer.updateOnce()
+                }
+            }) {
+                //Image(systemName: "1.square")
+                Text("Next")
+            }
         /*
             MetalView()
                 .opacity(1)

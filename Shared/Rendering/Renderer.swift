@@ -12,16 +12,17 @@ class Renderer {
     enum ComputeStates : Int {
         case ResetTexture, EvalShapes
     }
-    
-    /// Reference to the model
-    var model           : Model? = nil
-    
+        
     /// Reference to the current CTKView
     var view            : CTKView? = nil
     
-    /// The value textures
+    // The  textures
+    
+    var editorTexture   : MTLTexture? = nil
+
     var valueTexture    : MTLTexture? = nil
     var valueTexture2   : MTLTexture? = nil
+    
     var resultTexture   : MTLTexture? = nil
 
     /// Set to true if the renderer needs to reset (on resize, new shapes / rules etc).
@@ -79,9 +80,8 @@ class Renderer {
     }
     
     /// Sets the current CTKView which represents a context switch, reallocate all textures
-    func setView(_ model: Model,_ view : CTKView)
+    func setView(_ view : CTKView)
     {
-        self.model = model
         self.view = view
         
         // On the first init create the compute states
@@ -95,7 +95,7 @@ class Renderer {
     /// Resets rendering by seting the valueTexture to random values
     func reset()
     {
-        guard let texture = valueTexture, let model = model else {
+        guard let texture = valueTexture else {
             return
         }
         
@@ -116,19 +116,19 @@ class Renderer {
             return used
         }
         
-        let shapeArrayCount = 17*17
-        let ruleArrayCount = 200
+        //let shapeArrayCount = 17*17
+        //let ruleArrayCount = 200
 
-        arraysUsed[1] = checkArray(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
-        arraysUsed[2] = checkArray(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
+        //arraysUsed[1] = checkArray(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
+        //arraysUsed[2] = checkArray(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
 
-        arraysUsed[4] = checkArray(array: &model.mnca.rules[1].ruleValues, count: ruleArrayCount)
-        arraysUsed[5] = checkArray(array: &model.mnca.rules[2].ruleValues, count: ruleArrayCount)
+        //arraysUsed[4] = checkArray(array: &model.mnca.rules[1].ruleValues, count: ruleArrayCount)
+        //arraysUsed[5] = checkArray(array: &model.mnca.rules[2].ruleValues, count: ruleArrayCount)
         
         // Copy the rules to the meta data buffers, 5 Int32 per rule
         
         // Offset 1: Mode (Absolute / Average)
-        
+        /*
         var offset = 0
         for i in 0..<3 {
             let rule = model.mnca.rules[i]
@@ -136,7 +136,7 @@ class Renderer {
             arraysMetaData[offset + 1] = Int32(rule.mode.rawValue)
             
             offset += 5
-        }
+        }*/
         
         // Create or update update the MTLBuffers
 
@@ -149,6 +149,7 @@ class Renderer {
                 }
             }
             
+            /*
             shapeABuffer = createBuffer(array: &model.mnca.shapes[0].pixels17x17, count: shapeArrayCount)
             shapeBBuffer = createBuffer(array: &model.mnca.shapes[1].pixels17x17, count: shapeArrayCount)
             shapeCBuffer = createBuffer(array: &model.mnca.shapes[2].pixels17x17, count: shapeArrayCount)
@@ -159,18 +160,19 @@ class Renderer {
             
             buffersUsed = createBuffer(array: &arraysUsed, count: 7)
             buffersMetaData = createBuffer(array: &arraysMetaData, count: 20)
-
+             */
             // Create the palette
+            /*
             for (index, color) in model.mnca.colors.enumerated() {
                 paletteArray[index] = color.value
-            }
+            }*/
             
             paletteArray.withUnsafeMutableBytes { ptr in
                 paletteBuffer = view?.device!.makeBuffer(bytes: ptr.baseAddress!, length: 20 * MemoryLayout<float4>.stride, options: [])!
             }
         } else {
             // Update only the buffers which are used
-            
+            /*
             shapeABuffer!.contents().copyMemory(from: model.mnca.shapes[0].pixels17x17, byteCount: shapeArrayCount * MemoryLayout<Int32>.stride)
             if arraysUsed[1] == 1 {
                 shapeBBuffer!.contents().copyMemory(from: model.mnca.shapes[1].pixels17x17, byteCount: shapeArrayCount * MemoryLayout<Int32>.stride)
@@ -190,6 +192,7 @@ class Renderer {
             buffersUsed!.contents().copyMemory(from: arraysUsed, byteCount: arraysUsed.count * MemoryLayout<Int32>.stride)
             
             buffersMetaData!.contents().copyMemory(from: arraysMetaData, byteCount: arraysMetaData.count * MemoryLayout<Int32>.stride)
+             */
         }
         
         pingPong = false
@@ -277,6 +280,18 @@ class Renderer {
     /// Called from the outside to restart the renderer
     func update() {
         needsReset = true
+    }
+    
+    /// Updates the view once
+    func updateOnce()
+    {
+        view?.canUpdate = true
+        #if os(OSX)
+        let nsrect : NSRect = NSRect(x:0, y: 0, width: view!.frame.width, height: view!.frame.height)
+        view?.setNeedsDisplay(nsrect)
+        #else
+        view?.setNeedsDisplay()
+        #endif
     }
     
     /// Check if all textures have the correct size

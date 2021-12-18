@@ -53,6 +53,8 @@
 		2BF40B442674651F0090A139 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF40B422674651F0090A139 /* Renderer.swift */; };
 		2BF40B4626746D4E0090A139 /* Render.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2BF40B4526746D4E0090A139 /* Render.metal */; };
 		2BF40B4726746D4E0090A139 /* Render.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2BF40B4526746D4E0090A139 /* Render.metal */; };
+		DDB6C507276D6B9B00794889 /* CTKView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6C506276D6B9B00794889 /* CTKView.swift */; };
+		DDB6C508276D6B9B00794889 /* CTKView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6C506276D6B9B00794889 /* CTKView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +106,7 @@
 		2BF305DF2672E5AC00BB9982 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		2BF40B422674651F0090A139 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		2BF40B4526746D4E0090A139 /* Render.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Render.metal; sourceTree = "<group>"; };
+		DDB6C506276D6B9B00794889 /* CTKView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTKView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +187,7 @@
 		2BD3AA1A26743EF0002E70AF /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				DDB6C506276D6B9B00794889 /* CTKView.swift */,
 				2BF40B422674651F0090A139 /* Renderer.swift */,
 				2BD3AA1E26743F6B002E70AF /* MathLibrary.swift */,
 				2BD3AA2126744527002E70AF /* MetalDrawables.swift */,
@@ -421,6 +425,7 @@
 				2B67D4712679E65D0080AFCD /* PaletteColor.swift in Sources */,
 				2BD3AA2926744796002E70AF /* Utilities.swift in Sources */,
 				2BF305E12672E5AC00BB9982 /* CelluaApp.swift in Sources */,
+				DDB6C507276D6B9B00794889 /* CTKView.swift in Sources */,
 				2B856E0B267F26120002D955 /* DataModel.xcdatamodeld in Sources */,
 				2B856E0E267F27090002D955 /* PersistanceController.swift in Sources */,
 				2BC900C126783F5300B6E05A /* AppTabNavigation.swift in Sources */,
@@ -443,6 +448,7 @@
 				2BF40B4726746D4E0090A139 /* Render.metal in Sources */,
 				2B0710D02672ED020021DD82 /* Model.swift in Sources */,
 				2BCE503326802C89005EAB67 /* LibraryView.swift in Sources */,
+				DDB6C508276D6B9B00794889 /* CTKView.swift in Sources */,
 				2BD3AA1D26743F1C002E70AF /* CelluaView.swift in Sources */,
 				2BF305E42672E5AC00BB9982 /* ContentView.swift in Sources */,
 				2BD3AA26267446F3002E70AF /* Drawables.metal in Sources */,
